@@ -1,0 +1,38 @@
+llama_architecture:
+  vocab_size: 1024
+  dim: 128
+  n_layers: 2
+  n_heads: 8
+  n_kv_heads: 2
+  hidden_dim: 384
+  max_seq_len: 128
+  sliding_window: 32
+  norm_eps: 0.00001
+  rope_theta: 10000.0
+
+lora_finetuning:
+  r: 8
+  lora_alpha: 16
+  lora_dropout: 0.05
+  target_modules:
+    - q
+    - v
+  learning_rate: 0.001
+  num_train_epochs: 6
+  per_device_train_batch_size: 4
+  max_source_length: 256
+  max_target_length: 128
+  seed: 42
+  min_rouge_l_gate: 0.30
+  min_style_alignment_gate: 0.70
+
+advanced_rag:
+  top_k: 3
+  num_query_expansions: 3
+  rrf_k: 60
+  rerank_alpha_dense: 0.55
+  rerank_beta_lexical: 0.45
+
+ab_testing:
+  variant_b_traffic_split: 0.70
+  min_feedback_rating_for_dpo: 4

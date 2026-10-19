@@ -1,0 +1,66 @@
+{
+    "base_model_name": "google/flan-t5-small",
+    "hf_repo_id": "29Oms/mlops-project-4-llm-twin-adapter",
+    "lora_rank": 8,
+    "lora_alpha": 16,
+    "trainable_parameters": 344064,
+    "total_parameters": 77305216,
+    "trainable_percentage": 0.4451,
+    "num_train_samples": 24,
+    "num_val_samples": 6,
+    "epoch_losses": [
+        3.109,
+        2.9101,
+        2.716,
+        2.5802,
+        2.3459,
+        2.1798
+    ],
+    "final_train_loss": 2.1798,
+    "train_duration_sec": 119.86,
+    "base_metrics": {
+        "rouge1": 0.2979,
+        "rouge2": 0.1534,
+        "rougeL": 0.2692,
+        "style_alignment_score": 0.3317
+    },
+    "lora_twin_metrics": {
+        "rouge1": 0.6292,
+        "rouge2": 0.3962,
+        "rougeL": 0.5666,
+        "style_alignment_score": 0.7699
+    },
+    "improvements": {
+        "rouge1_delta": 0.3313,
+        "rouge2_delta": 0.2428,
+        "rougeL_delta": 0.2974,
+        "style_alignment_delta": 0.4382
+    },
+    "evaluation_gate": {
+        "min_rouge_l_gate": 0.3,
+        "min_style_alignment_gate": 0.7,
+        "rouge_l_passed": true,
+        "style_alignment_passed": true,
+        "promotion_approved": true
+    },
+    "sample_comparisons": [
+        {
+            "instruction": "Respond as Om Chavan's LLM Twin: Explain why the 3-Pipeline FTI architecture is superior to monolithic LLM scripts.",
+            "reference_twin": "In production LLMOps, we decouple systems into the 3-Pipeline FTI architecture: the Feature Pipeline ingests MongoDB documents into Qdrant vectors, the Training Pipeline fine-tunes LoRA adapters tracked in CometML, and the Inference Pipeline serves Multi-Agent RAG with Opik telemetry.",
+            "base_prediction": "Feature Pipeline (MongoDB + Qdrant), Training Pipeline (CometML + LoRA), and Inference Pipeline (Multi-Agent RAG + Opik).",
+            "lora_twin_prediction": "The 3-Pipeline FTI architecture is superior to monolithic LLM scripts, and we decouple the LLM Twin into three autonomous pipelines: Feature Pipeline (MongoDB + Qdrant), Training Pipeline (CometML + LoRA), and Inference Pipeline (Multi-Agent RAG + Opik)."
+        },
+        {
+            "instruction": "Respond as Om Chavan's LLM Twin: Summarize the four core mathematical upgrades in LLaMA and Mistral.",
+            "reference_twin": "Modern decoder LLMs like LLaMA and Mistral rely on four first-principles upgrades: RMSNorm for fast root-mean-square normalization, RoPE for complex-plane relative positions, SwiGLU gated feed-forward layers, and Grouped-Query Attention (GQA) with Sliding Window Attention to compress KV-cache memory.",
+            "base_prediction": "LLaMA and Mistral",
+            "lora_twin_prediction": "LLaMA and Mistral replace vanilla Transformer blocks with RMSNorm normalization, Rotary Positional Embeddings (RoPE) in the complex plane, SwiGLU gated feed-forward networks, and Grouped-Query Attention (GQA) with Sliding Window Attention to reduce KV-cache memory."
+        },
+        {
+            "instruction": "Respond as Om Chavan's LLM Twin: How does our Advanced RAG pipeline improve over naive single-vector retrieval?",
+            "reference_twin": "To eliminate naive RAG vocabulary mismatch, our Advanced RAG pipeline combines k=3 Query Expansion, Self-Query metadata filtering, Hybrid Qdrant dense + BM25 lexical retrieval fused via RRF, and Cross-Feature Reranking with inline [TWIN-DOC] citations.",
+            "base_prediction": "Self-Query Metadata Extraction for platform filters, Hybrid Qdrant dense + BM25 lexical search with Reciprocal Rank Fusion (RRF), and Cross-Feature Reranking",
+            "lora_twin_prediction": "Our Advanced RAG engine implements a four-stage retrieval funnel: Query Expansion into k=3 sub-queries, Self-Query Metadata Extraction for platform filters, Hybrid Qdrant dense + BM25 lexical search with Reciprocal Rank Fusion (RRF), and Cross-Feature Reranking."
+        }
+    ]
+}

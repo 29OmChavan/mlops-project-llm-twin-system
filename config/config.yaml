@@ -1,0 +1,27 @@
+artifacts_root: artifacts
+
+feature_pipeline:
+  root_dir: artifacts/feature_store
+  raw_warehouse_path: artifacts/feature_store/mongodb_warehouse.json
+  cleaned_chunks_path: artifacts/feature_store/cleaned_chunks.json
+  qdrant_path: artifacts/feature_store/qdrant_db
+  collection_name: llm_twin_digital_data
+  embedding_dim: 256
+  chunk_size: 450
+  chunk_overlap: 60
+
+training_pipeline:
+  root_dir: artifacts/training
+  instruction_dataset_path: artifacts/training/instruction_dataset.json
+  val_dataset_path: artifacts/training/val_instruction_dataset.json
+  base_model_name: google/flan-t5-small
+  adapter_dir: artifacts/training/llm_twin_lora_adapter
+  metrics_path: artifacts/training/evaluation_report.json
+  hf_repo_id: 29Oms/mlops-project-4-llm-twin-adapter
+
+inference_pipeline:
+  root_dir: artifacts/inference
+  telemetry_log_path: artifacts/inference/opik_telemetry_traces.jsonl
+  ab_test_log_path: artifacts/inference/ab_test_experiments.jsonl
+  feedback_store_path: artifacts/inference/user_feedback_dpo_queue.json
+  rag_benchmark_path: artifacts/inference/advanced_rag_benchmark.json

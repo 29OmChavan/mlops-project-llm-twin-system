@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  llm-twin-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: 29omchavan/mlops-project-4-llm-twin-system:latest
+    container_name: llm-twin-api
+    ports:
+      - "8080:8080"
+    environment:
+      - PYTHONUTF8=1
+    restart: unless-stopped

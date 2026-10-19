@@ -1,0 +1,4 @@
+{"trace_id": "opik-trace-002cd3401927", "timestamp": "2026-10-19T15:23:09.122681+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 4.31, "faithfulness_score": 0.7857, "style_alignment_score": 0.9229}
+{"trace_id": "opik-trace-0e419443a012", "timestamp": "2026-10-19T15:24:37.177949+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 4.54, "faithfulness_score": 0.8276, "style_alignment_score": 0.906}
+{"trace_id": "opik-trace-60ad05337b70", "timestamp": "2026-10-19T15:24:37.197702+00:00", "ab_variant": "Variant_A_Base_RAG", "latency_ms": 0.9, "faithfulness_score": 0.9091, "style_alignment_score": 0.9838}
+{"trace_id": "opik-trace-5cfd82f94e8d", "timestamp": "2026-10-19T15:24:37.239919+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 2.97, "faithfulness_score": 0.8308, "style_alignment_score": 0.917}

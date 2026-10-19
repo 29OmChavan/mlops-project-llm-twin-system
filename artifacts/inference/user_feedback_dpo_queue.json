@@ -1,0 +1,29 @@
+[
+    {
+        "feedback_id": "fb-303b6769f0",
+        "trace_id": "opik-trace-002cd3401927",
+        "timestamp": "2026-10-19T15:23:09.123949+00:00",
+        "instruction": "Respond as Om Chavan's LLM Twin: How does our 3-Pipeline FTI architecture decouple MongoDB, Qdrant, and LoRA fine-tuning?",
+        "chosen_response": "[Om Chavan LLM Twin · fti_architecture] Grounded in Designing Production LLMs with the 3-Pipeline FTI (Feature, Training, Inference) Architecture [TWIN-DOC-101] (medium): In my production engineering practice, monolithic LLM scripts fail the moment data velocity or model serving SLA requirements scale. Following the Feature-Training-Inference (FTI) architectural pattern, we decouple the LLM Twin into three autonomous pipelines communicating strictly through versioned stores. First, the Feature Pipeline crawls GitHub repositories, Medium articles, and LinkedIn posts into a MongoDB NoSQL warehouse, then cleans, chun Complementary architecture evidence from [TWIN-DOC-101] (Designing Production LLMs with the 3-Pipeline FTI (Feature, Training, Inference) Architecture).",
+        "rating": 5,
+        "promoted_to_dpo_retraining_queue": true
+    },
+    {
+        "feedback_id": "fb-cb7194b2d9",
+        "trace_id": "opik-trace-60ad05337b70",
+        "timestamp": "2026-10-19T15:24:37.205759+00:00",
+        "instruction": "Respond as Om Chavan's LLM Twin: Explain RMSNorm and RoPE in LLaMA.",
+        "chosen_response": "RMSNorm normalizes by root-mean-square and RoPE rotates query/key pairs.",
+        "rating": 5,
+        "promoted_to_dpo_retraining_queue": true
+    },
+    {
+        "feedback_id": "fb-73d51da0a2",
+        "trace_id": "opik-trace-5cfd82f94e8d",
+        "timestamp": "2026-10-19T15:24:37.241924+00:00",
+        "instruction": "Respond as Om Chavan's LLM Twin: Explain RMSNorm, RoPE, SwiGLU, and Grouped-Query Attention in LLaMA and Mistral.",
+        "chosen_response": "[Om Chavan LLM Twin · llama_mistral_internals] Grounded in Mathematical Internals of LLaMA & Mistral: RMSNorm, RoPE, SwiGLU, and Grouped-Query Attention [TWIN-DOC-102] (medium): pairs in the complex plane via e^(i * m * theta_j). Third, SwiGLU replaces ReLU feed-forward networks with a gated linear unit SwiGLU(x) = (SiLU(x W_gate) * x W_up) W_down. Fourth, Grouped-Query Attention (GQA) shares Key/Value heads across G = H_Q / H_KV query groups alongside Mistral's Sliding Window Attention (W=32/4096) to slash KV-cache memory. Complementary architecture evidence from [TWIN-DOC-102] (Mathematical Internals of LLaMA & Mistral: RMSNorm, RoPE, SwiGLU, and Grouped-Query Attention).",
+        "rating": 5,
+        "promoted_to_dpo_retraining_queue": true
+    }
+]
