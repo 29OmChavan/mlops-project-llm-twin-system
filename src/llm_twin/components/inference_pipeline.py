@@ -329,9 +329,11 @@ class InferencePipeline:
         query: str,
         top_k: int = 3,
         variant: Optional[str] = None,
+        output_format: str = "technical_answer",
     ) -> Dict[str, Any]:
         """
-        End-to-end Multi-Agent Inference Pipeline with A/B Routing and Comet Opik Trace Logging.
+        End-to-end Multi-Agent Inference Pipeline with A/B Routing, Persona Content Formats,
+        and Comet Opik Trace Logging.
         """
         try:
             trace_id = f"opik-trace-{uuid.uuid4().hex[:12]}"
@@ -348,7 +350,7 @@ class InferencePipeline:
             chunks = rag_bundle["retrieved_chunks"]
             citations = [f"[{c['doc_id']}]" for c in chunks]
 
-            # Span 3: TwinWriterAgent
+            # Span 3: TwinWriterAgent (supports Technical Answer, LinkedIn Post, Medium Article, GitHub ADR)
             t_gen_start = time.perf_counter()
             if not chunks:
                 raw_answer = "Insufficient grounded context in Om Chavan's Digital Data Warehouse to answer."
@@ -356,15 +358,42 @@ class InferencePipeline:
                 primary = chunks[0]
                 secondary = chunks[1] if len(chunks) > 1 else None
                 if chosen_variant == "Variant_B_LLMTwin_LoRA_AdvRAG":
-                    raw_answer = (
-                        f"[Om Chavan LLM Twin · {rag_bundle['intent']}] Grounded in {primary['title']} "
-                        f"[{primary['doc_id']}] ({primary['platform']}): {primary['text']}"
-                    )
-                    if secondary:
-                        raw_answer += (
-                            f" Complementary architecture evidence from [{secondary['doc_id']}] "
-                            f"({secondary['title']})."
+                    if output_format == "linkedin_post":
+                        raw_answer = (
+                            f"🚀 Production Engineering Insight ({rag_bundle['intent'].replace('_', ' ').title()})\n\n"
+                            f"In my work building {primary['title']} [{primary['doc_id']}], here is the core architectural takeaway:\n"
+                            f"• {primary['text']}\n"
                         )
+                        if secondary:
+                            raw_answer += f"• Complementary pattern from [{secondary['doc_id']}]: {secondary['title']}.\n"
+                        raw_answer += "\n#LLMOps #MLOps #ProductionAI #Qdrant #PyTorch"
+                    elif output_format == "medium_article_section":
+                        raw_answer = (
+                            f"### Deep-Dive: {primary['title']} [{primary['doc_id']}]\n\n"
+                            f"{primary['text']} "
+                        )
+                        if secondary:
+                            raw_answer += (
+                                f"\n\n**Architectural Cross-Reference ([{secondary['doc_id']} — {secondary['title']}):** "
+                                f"{secondary['text']}"
+                            )
+                    elif output_format == "github_adr_review":
+                        raw_answer = (
+                            f"### ADR Review · [{primary['doc_id']}] ({primary['platform']})\n"
+                            f"- **Intent**: `{rag_bundle['intent']}`\n"
+                            f"- **Verified Grounding**: {primary['text']}\n"
+                            f"- **Verdict**: Approved for production FTI pipeline deployment."
+                        )
+                    else:
+                        raw_answer = (
+                            f"[Om Chavan LLM Twin · {rag_bundle['intent']}] Grounded in {primary['title']} "
+                            f"[{primary['doc_id']}] ({primary['platform']}): {primary['text']}"
+                        )
+                        if secondary:
+                            raw_answer += (
+                                f" Complementary architecture evidence from [{secondary['doc_id']}] "
+                                f"({secondary['title']})."
+                            )
                 else:
                     raw_answer = f"According to [{primary['doc_id']}]: {primary['text']}"
             gen_ms = round((time.perf_counter() - t_gen_start) * 1000.0, 2)
@@ -391,6 +420,7 @@ class InferencePipeline:
                 "timestamp": datetime.now(timezone.utc).isoformat(),
                 "query": query,
                 "ab_variant": chosen_variant,
+                "output_format": output_format,
                 "intent": rag_bundle["intent"],
                 "self_query_filters": rag_bundle["self_query_filters"],
                 "expanded_queries": rag_bundle["expanded_queries"],
@@ -425,6 +455,158 @@ class InferencePipeline:
             return trace_record
         except Exception as e:
             raise CustomException(e, sys) from e
+
+    def compare_ab_variants(self, query: str, top_k: int = 3, output_format: str = "technical_answer") -> Dict[str, Any]:
+        """
+        Runs a live side-by-side duel between Variant A (Base + Naive RAG) and
+        Variant B (Fine-Tuned LLM Twin + Advanced Multi-Query Hybrid RAG).
+        """
+        res_a = self.generate_twin_response(
+            query=query, top_k=top_k, variant="Variant_A_Base_RAG", output_format=output_format
+        )
+        res_b = self.generate_twin_response(
+            query=query, top_k=top_k, variant="Variant_B_LLMTwin_LoRA_AdvRAG", output_format=output_format
+        )
+        return {
+            "query": query,
+            "variant_a": res_a,
+            "variant_b": res_b,
+            "style_alignment_delta": round(res_b["style_alignment_score"] - res_a["style_alignment_score"], 4),
+            "faithfulness_delta": round(res_b["faithfulness_score"] - res_a["faithfulness_score"], 4),
+        }
+
+    def ingest_custom_document(
+        self,
+        platform: str,
+        category: str,
+        title: str,
+        content: str,
+        link: str = "https://github.com/29OmChavan",
+    ) -> Dict[str, Any]:
+        """
+        Ingests a new digital document into the MongoDB Warehouse + Qdrant Vector DB + BM25 Index at runtime.
+        """
+        doc_id = f"TWIN-DOC-{100 + len(self.chunks) + 1}"
+        chunk_id = f"{doc_id}-CHUNK-01"
+        embedding = compute_twin_embedding(f"{title}. {content}", dim=self.embedding_dim)
+        new_chunk = {
+            "chunk_id": chunk_id,
+            "doc_id": doc_id,
+            "author_id": "author-om-chavan",
+            "author_full_name": "Om Chavan",
+            "platform": platform.lower().strip(),
+            "category": category.lower().strip(),
+            "title": title.strip(),
+            "link": link.strip(),
+            "chunk_index": 0,
+            "text": content.strip(),
+            "embedding": embedding,
+        }
+        self.chunks.append(new_chunk)
+        save_json(self.chunks_path, self.chunks)
+
+        warehouse_path = Path("artifacts/feature_store/mongodb_warehouse.json")
+        warehouse = load_json(warehouse_path) if warehouse_path.exists() else []
+        warehouse.append(
+            {
+                "doc_id": doc_id,
+                "author_id": "author-om-chavan",
+                "author_full_name": "Om Chavan",
+                "platform": platform.lower().strip(),
+                "category": category.lower().strip(),
+                "title": title.strip(),
+                "content": content.strip(),
+                "link": link.strip(),
+                "created_at": datetime.now(timezone.utc).isoformat(),
+            }
+        )
+        save_json(warehouse_path, warehouse)
+        self._build_indices()
+        return {
+            "status": "INDEXED_IN_MONGODB_AND_QDRANT",
+            "doc_id": doc_id,
+            "chunk_id": chunk_id,
+            "total_qdrant_chunks": len(self.chunks),
+        }
+
+    @staticmethod
+    def run_llama_mistral_diagnostics(
+        dim: int = 64,
+        n_heads: int = 8,
+        n_kv_heads: int = 2,
+        seq_len: int = 16,
+        sliding_window: int = 4,
+    ) -> Dict[str, Any]:
+        """
+        Executes a live PyTorch diagnostic pass on our first-principles LLaMA/Mistral components
+        (`RMSNorm`, `RoPE`, `SwiGLU`, `GroupedQueryAttention`, `MiniLLaMAMistralForCausalLM`).
+        """
+        import torch
+        from src.llm_twin.components.llama_mistral_from_scratch import (
+            RMSNorm,
+            precompute_theta_pos_frequencies,
+            apply_rotary_embeddings,
+            MiniLLaMAMistralForCausalLM,
+        )
+
+        t0 = time.perf_counter()
+        if n_heads % n_kv_heads != 0:
+            n_kv_heads = max(1, n_heads // 2)
+        if dim % n_heads != 0:
+            dim = n_heads * 8
+
+        head_dim = dim // n_heads
+        if head_dim % 2 != 0:
+            dim = n_heads * (head_dim + 1)
+            head_dim = dim // n_heads
+
+        torch.manual_seed(42)
+        x = torch.randn(1, seq_len, dim)
+        rms = RMSNorm(dim)
+        x_norm = rms(x)
+
+        freqs = precompute_theta_pos_frequencies(head_dim=head_dim, max_seq_len=max(seq_len * 2, 32))
+        q = torch.randn(1, seq_len, n_heads, head_dim)
+        q_rot = apply_rotary_embeddings(q, freqs[:seq_len])
+        norm_before = round(float(torch.norm(q, dim=-1).mean().item()), 6)
+        norm_after = round(float(torch.norm(q_rot, dim=-1).mean().item()), 6)
+
+        model = MiniLLaMAMistralForCausalLM(
+            vocab_size=256,
+            dim=dim,
+            n_layers=2,
+            n_heads=n_heads,
+            n_kv_heads=n_kv_heads,
+            hidden_dim=dim * 3,
+            max_seq_len=max(seq_len, 32),
+            sliding_window=sliding_window,
+        )
+        tokens = torch.randint(0, 256, (1, seq_len))
+        logits, attn = model(tokens)
+
+        attn_matrix = attn[0, 0].detach().numpy()
+        zero_cells = int((attn_matrix == 0.0).sum())
+        total_cells = seq_len * seq_len
+        sparsity_pct = round((zero_cells / max(total_cells, 1)) * 100.0, 2)
+
+        elapsed_ms = round((time.perf_counter() - t0) * 1000.0, 2)
+        return {
+            "dim": dim,
+            "n_heads": n_heads,
+            "n_kv_heads": n_kv_heads,
+            "gqa_group_ratio": n_heads // n_kv_heads,
+            "kv_cache_memory_savings_pct": round((1.0 - (n_kv_heads / n_heads)) * 100.0, 1),
+            "seq_len": seq_len,
+            "sliding_window": sliding_window,
+            "rmsnorm_output_rms": round(float(x_norm.pow(2).mean().sqrt().item()), 4),
+            "rope_l2_norm_before": norm_before,
+            "rope_l2_norm_after": norm_after,
+            "rope_norm_preserved": abs(norm_before - norm_after) < 1e-4,
+            "sliding_window_sparsity_pct": sparsity_pct,
+            "logits_shape": list(logits.shape),
+            "attention_sample_row_last_token": [round(float(v), 4) for v in attn_matrix[-1].tolist()],
+            "execution_time_ms": elapsed_ms,
+        }
 
     # =====================================================================
     # User Feedback & DPO / SFT Retraining Loop

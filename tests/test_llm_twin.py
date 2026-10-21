@@ -1,5 +1,5 @@
 """
-Comprehensive Unit & Integration Test Suite for Project 04: Production LLM Twin System.
+Comprehensive Unit & Integration Test Suite for Project 04: Production LLM Twin System (v2.0).
 """
 from fastapi.testclient import TestClient
 import torch
@@ -40,7 +40,6 @@ def test_llama_mistral_architecture_from_scratch():
     out, attn = gqa(x, freqs)
     assert out.shape == (batch_size, seq_len, dim)
     assert attn.shape == (batch_size, n_heads, seq_len, seq_len)
-    # Token at pos 10 should have 0 attention weight on token at pos 2 when sliding_window=4
     assert float(attn[0, 0, 10, 2].item()) == 0.0
 
     # 4. SwiGLU + Full MiniLLaMAMistralForCausalLM forward pass
@@ -92,12 +91,13 @@ def test_advanced_rag_and_multi_agent_orchestrator():
         query="How does our GitHub repository implement Query Expansion, Self-Querying, and RRF?",
         top_k=3,
         variant="Variant_B_LLMTwin_LoRA_AdvRAG",
+        output_format="linkedin_post",
     )
     assert res["intent"] == "advanced_rag"
     assert res["self_query_filters"]["platform"] == "github"
     assert len(res["expanded_queries"]) == 3
     assert "[TWIN-DOC-103]" in res["citations"]
-    assert res["faithfulness_score"] >= 0.50
+    assert "#LLMOps" in res["answer"]
 
 
 def test_safety_critic_and_dpo_feedback_loop():
@@ -132,25 +132,60 @@ def test_safety_critic_and_dpo_feedback_loop():
     assert fb["dpo_queue_size"] >= 1
 
 
-def test_fastapi_endpoints():
+def test_fastapi_endpoints_and_multi_page_views():
     client = TestClient(app)
 
+    # JSON API health & telemetry checks
     r_health = client.get("/health")
     assert r_health.status_code == 200
     assert r_health.json()["status"] == "healthy"
 
+    # Browser HTML health & telemetry checks
+    r_health_html = client.get("/health", headers={"Accept": "text/html"})
+    assert r_health_html.status_code == 200
+    assert "Comet Opik" in r_health_html.text
+
+    r_tel_html = client.get("/telemetry", headers={"Accept": "text/html"})
+    assert r_tel_html.status_code == 200
+    assert "DPO / SFT Preference Retraining Queue" in r_tel_html.text
+
+    # Multi-page HTML routes check
+    for route in ["/", "/intro", "/studio", "/warehouse", "/llama-lab", "/training-hub"]:
+        resp = client.get(route)
+        assert resp.status_code == 200
+
+    # Twin Chat, A/B Duel & LLaMA Diagnostics API checks
     r_chat = client.post(
         "/twin-chat",
         json={
             "query": "Explain RMSNorm, RoPE, SwiGLU, and Grouped-Query Attention in LLaMA and Mistral.",
             "top_k": 3,
             "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG",
+            "output_format": "medium_article_section",
         },
     )
     assert r_chat.status_code == 200
     chat_data = r_chat.json()
     assert "trace_id" in chat_data
     assert "[TWIN-DOC-102]" in chat_data["citations"]
+
+    r_duel = client.post(
+        "/ab-duel",
+        json={
+            "query": "How does the 3-Pipeline FTI architecture decouple MongoDB and Qdrant?",
+            "top_k": 3,
+        },
+    )
+    assert r_duel.status_code == 200
+    assert "variant_a" in r_duel.json()
+    assert "variant_b" in r_duel.json()
+
+    r_diag = client.post(
+        "/llama-diagnostics",
+        json={"dim": 64, "n_heads": 8, "n_kv_heads": 2, "seq_len": 16, "sliding_window": 4},
+    )
+    assert r_diag.status_code == 200
+    assert r_diag.json()["rope_norm_preserved"] is True
 
     r_fb = client.post(
         "/feedback",

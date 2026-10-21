@@ -2,3 +2,10 @@
 {"trace_id": "opik-trace-0e419443a012", "timestamp": "2026-10-19T15:24:37.177949+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 4.54, "faithfulness_score": 0.8276, "style_alignment_score": 0.906}
 {"trace_id": "opik-trace-60ad05337b70", "timestamp": "2026-10-19T15:24:37.197702+00:00", "ab_variant": "Variant_A_Base_RAG", "latency_ms": 0.9, "faithfulness_score": 0.9091, "style_alignment_score": 0.9838}
 {"trace_id": "opik-trace-5cfd82f94e8d", "timestamp": "2026-10-19T15:24:37.239919+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 2.97, "faithfulness_score": 0.8308, "style_alignment_score": 0.917}
+{"trace_id": "opik-trace-5debfe14548a", "timestamp": "2026-10-21T14:26:17.728681+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 4.71, "faithfulness_score": 0.7353, "style_alignment_score": 0.8917}
+{"trace_id": "opik-trace-a6342a9ec59c", "timestamp": "2026-10-21T14:26:17.753643+00:00", "ab_variant": "Variant_A_Base_RAG", "latency_ms": 0.94, "faithfulness_score": 0.9091, "style_alignment_score": 0.9838}
+{"trace_id": "opik-trace-28b4fa6211d1", "timestamp": "2026-10-21T14:26:17.884282+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 3.51, "faithfulness_score": 0.7857, "style_alignment_score": 0.9229}
+{"trace_id": "opik-trace-dcf6873432bf", "timestamp": "2026-10-21T14:26:17.913954+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 3.73, "faithfulness_score": 0.7857, "style_alignment_score": 0.9229}
+{"trace_id": "opik-trace-6eaf6701b453", "timestamp": "2026-10-21T14:26:18.112100+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 6.2, "faithfulness_score": 0.9143, "style_alignment_score": 0.8738}
+{"trace_id": "opik-trace-937f84b1ad37", "timestamp": "2026-10-21T14:26:18.118212+00:00", "ab_variant": "Variant_A_Base_RAG", "latency_ms": 1.89, "faithfulness_score": 0.9556, "style_alignment_score": 0.9903}
+{"trace_id": "opik-trace-24f4f9ddbde4", "timestamp": "2026-10-21T14:26:18.128155+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 5.17, "faithfulness_score": 0.7857, "style_alignment_score": 0.9229}
