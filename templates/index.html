@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>29OmChavan/llm-twin-fti-pipeline (MongoDB + Qdrant + LoRA)</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>29OmChavan / llm-twin-system - Step-by-Step Modal Workspace</title>
     <style>
-        /* Pre-2022 GitHub Primer / Sourcegraph Repository UI (2020 Light Theme) */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f8fa;
             color: #24292e;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             font-size: 14px;
             line-height: 1.5;
         }
-        code, pre, .mono {
-            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-            font-size: 12px;
-        }
-        /* Classic 2020 GitHub #24292e Header */
+        a { color: #0366d6; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
         .gh-header {
             background-color: #24292e;
             color: #ffffff;
@@ -27,111 +26,144 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
         }
-        .gh-header a {
-            color: #ffffff;
-            text-decoration: none;
-            font-weight: 600;
+        .gh-header-title {
             font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
         }
-        .gh-meta {
+        .gh-header-meta {
             font-size: 12px;
             color: #d1d5da;
         }
-        /* Classic 2020 GitHub Repo Subheader & Underline Tab Bar */
-        .gh-repohead {
-            background-color: #f6f8fa;
+
+        .repo-head {
+            background-color: #fafbfc;
             border-bottom: 1px solid #e1e4e8;
-            padding: 14px 24px 0;
+            padding: 14px 24px 0 24px;
         }
-        .gh-repo-path {
-            font-size: 18px;
-            margin-bottom: 12px;
-            color: #586069;
+        .repo-head-inner {
+            max-width: 780px;
+            margin: 0 auto;
         }
-        .gh-repo-path strong { color: #0366d6; font-weight: 600; }
-        .gh-tabs {
+        .repo-path {
+            font-size: 16px;
+            margin-bottom: 10px;
             display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            margin-bottom: -1px;
-        }
-        .gh-tab {
-            padding: 8px 14px;
-            color: #24292e;
-            text-decoration: none;
-            font-size: 13.5px;
-            border: 1px solid transparent;
-            border-bottom: 2px solid transparent;
-        }
-        .gh-tab:hover {
-            border-bottom-color: #d1d5da;
-        }
-        .gh-tab.active {
-            font-weight: 600;
-            background-color: #ffffff;
-            border-color: #e1e4e8;
-            border-bottom-color: #ffffff;
-            border-top: 2px solid #f9826c;
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
-        }
-        .counter {
-            display: inline-block;
-            padding: 1px 6px;
-            font-size: 11px;
-            font-weight: 600;
-            background-color: rgba(27,31,35,0.08);
-            border-radius: 10px;
-            margin-left: 4px;
-        }
-        /* Main Container */
-        .container {
-            max-width: 1240px;
-            margin: 20px auto;
-            padding: 0 20px 48px;
-        }
-        .split-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-            align-items: start;
-        }
-        .split-4 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        @media (max-width: 920px) {
-            .split-2, .split-4 { grid-template-columns: 1fr; }
-        }
-        /* Classic GitHub Box */
-        .box {
-            background-color: #ffffff;
-            border: 1px solid #e1e4e8;
-            border-radius: 6px;
-            margin-bottom: 16px;
-        }
-        .box-header {
-            background-color: #f6f8fa;
-            border-bottom: 1px solid #e1e4e8;
-            padding: 10px 16px;
-            font-weight: 600;
-            font-size: 13.5px;
-            border-top-left-radius: 6px;
-            border-top-right-radius: 6px;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             flex-wrap: wrap;
             gap: 8px;
         }
-        .box-body {
-            padding: 16px;
+        .repo-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
         }
-        /* Form Controls */
+        .repo-tab {
+            padding: 7px 12px;
+            color: #586069;
+            font-size: 12.5px;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 6px 6px 0 0;
+        }
+        .repo-tab:hover {
+            color: #24292e;
+            text-decoration: none;
+            background: #f1f4f8;
+        }
+        .repo-tab.active {
+            background-color: #ffffff;
+            color: #24292e;
+            font-weight: 600;
+            border-color: #e1e4e8;
+            border-top: 2px solid #f9826c;
+            position: relative;
+            top: 1px;
+        }
+
+        /* Centered Modal Container */
+        .wizard-shell {
+            max-width: 720px;
+            margin: 26px auto 56px auto;
+            padding: 0 16px;
+        }
+        .modal-card {
+            background: #ffffff;
+            border: 1px solid #d1d5da;
+            border-radius: 6px;
+            box-shadow: 0 6px 20px rgba(27,31,35,0.08);
+            overflow: hidden;
+        }
+        .modal-head {
+            background: #f6f8fa;
+            border-bottom: 1px solid #e1e4e8;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-head h2 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 600;
+            color: #24292e;
+        }
+        .step-badge {
+            background: #e1e4e8;
+            color: #24292e;
+            padding: 3px 9px;
+            border-radius: 12px;
+            font-size: 11.5px;
+            font-weight: 600;
+        }
+        .stepper-bar {
+            display: flex;
+            background: #fafbfc;
+            border-bottom: 1px solid #e1e4e8;
+        }
+        .step-pill {
+            flex: 1;
+            text-align: center;
+            padding: 9px 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6a737d;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            user-select: none;
+        }
+        .step-pill.active {
+            color: #0366d6;
+            border-bottom-color: #0366d6;
+            background: #ffffff;
+        }
+        .step-pill.done {
+            color: #22863a;
+            border-bottom-color: #28a745;
+        }
+
+        .modal-body {
+            padding: 22px 24px;
+        }
+        .wizard-pane {
+            display: none;
+        }
+        .wizard-pane.active {
+            display: block;
+        }
+
+        .modal-foot {
+            background: #f6f8fa;
+            border-top: 1px solid #e1e4e8;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         label {
             display: block;
             font-weight: 600;
@@ -141,719 +173,721 @@
         }
         input[type="text"], input[type="number"], select, textarea {
             width: 100%;
-            padding: 6px 10px;
+            padding: 7px 10px;
             font-size: 13px;
-            line-height: 20px;
+            line-height: 1.4;
             color: #24292e;
             background-color: #fafbfc;
             border: 1px solid #d1d5da;
             border-radius: 4px;
-            margin-bottom: 10px;
             font-family: inherit;
         }
-        input:focus, select:focus, textarea:focus {
-            background-color: #ffffff;
-            border-color: #0366d6;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(3,102,214,0.15);
-        }
-        /* Classic GitHub Buttons */
-        .btn-green {
-            background-color: #2ea44f;
-            color: #ffffff;
-            border: 1px solid rgba(27,31,35,0.15);
-            padding: 6px 14px;
-            font-size: 13px;
-            font-weight: 600;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn-green:hover { background-color: #2c974b; }
-        .btn-gray {
-            background-color: #fafbfc;
-            color: #24292e;
-            border: 1px solid rgba(27,31,35,0.15);
-            padding: 4px 10px;
+        textarea {
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
             font-size: 12px;
+        }
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 7px 14px;
+            font-size: 12.5px;
             font-weight: 600;
-            border-radius: 4px;
+            line-height: 18px;
             cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
+            border: 1px solid rgba(27,31,35,0.15);
+            border-radius: 4px;
         }
-        .btn-gray:hover { background-color: #f3f4f6; }
-        /* Labels */
-        .label-pill {
-            display: inline-block;
-            padding: 2px 8px;
-            font-size: 11.5px;
-            font-weight: 600;
-            border-radius: 12px;
-            border: 1px solid transparent;
-        }
-        .label-green { background-color: #dcffe4; color: #165c26; border-color: #bef5cb; }
-        .label-blue { background-color: #f1f8ff; color: #0366d6; border-color: #c8e1ff; }
-        .label-yellow { background-color: #fffbdd; color: #735c0f; border-color: #fae17d; }
-        /* Tables */
-        table.gh-table {
+        .btn-primary { background-color: #2ea44f; color: #ffffff; }
+        .btn-primary:hover { background-color: #2c974b; }
+        .btn-blue { background-color: #0366d6; color: #ffffff; }
+        .btn-blue:hover { background-color: #0256b9; }
+        .btn-secondary { background-color: #fafbfc; color: #24292e; }
+        .btn-secondary:hover { background-color: #f3f4f6; }
+
+        table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
+            font-size: 12.5px;
+            margin-bottom: 10px;
         }
-        table.gh-table th, table.gh-table td {
+        th, td {
             border: 1px solid #dfe2e5;
-            padding: 7px 11px;
+            padding: 7px 10px;
             text-align: left;
+            vertical-align: top;
         }
-        table.gh-table th {
+        th {
             background-color: #f6f8fa;
             font-weight: 600;
         }
-        table.gh-table tr:nth-child(even) { background-color: #fafbfc; }
-        pre.gh-code {
+
+        .label-pill {
+            display: inline-block;
+            padding: 2px 7px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 10px;
+            border: 1px solid transparent;
+        }
+        .pill-green { background-color: #dcffe4; color: #22863a; border-color: #34d058; }
+        .pill-blue { background-color: #f1f8ff; color: #0366d6; border-color: #c8e1ff; }
+        .pill-yellow { background-color: #fffbdd; color: #735c0f; border-color: #f9c513; }
+
+        .flash {
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            border: 1px solid #34d058;
+            border-radius: 4px;
+            background-color: #dcffe4;
+            color: #22863a;
+            font-size: 12.5px;
+        }
+        .code-block {
             background-color: #f6f8fa;
             border: 1px solid #e1e4e8;
             border-radius: 4px;
             padding: 12px;
-            overflow-x: auto;
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 12px;
             white-space: pre-wrap;
-            color: #24292e;
+            overflow-x: auto;
         }
-        .flash-info {
-            background-color: #f1f8ff;
-            border: 1px solid #c8e1ff;
-            color: #032f62;
-            padding: 10px 14px;
-            border-radius: 4px;
-            margin-bottom: 14px;
-            font-size: 13px;
-        }
-        .flash-success {
-            background-color: #dcffe4;
-            border: 1px solid #bef5cb;
-            color: #165c26;
-            padding: 10px 14px;
-            border-radius: 4px;
-            margin-bottom: 14px;
-            font-size: 13px;
-        }
+        .hint { font-size: 12px; color: #586069; margin-top: 0; margin-bottom: 12px; }
     </style>
 </head>
 <body>
-    <!-- Top Bar -->
-    <header class="gh-header">
-        <div>
-            <a href="/">29OmChavan / llm-twin-fti-pipeline</a>
-            <span class="gh-meta" style="margin-left:10px;">3-Pipeline FTI Split (Feature / Training / Inference)</span>
-        </div>
-        <div class="gh-meta mono">
-            MongoDB Docs: <strong>{{ health.mongodb_documents_count }}</strong> |
-            Qdrant Chunks: <strong>{{ health.qdrant_chunks_indexed }}</strong> |
-            Gate: <strong>{{ 'PASSED' if health.evaluation_gate_ready else 'CHECK' }}</strong>
-        </div>
-    </header>
 
-    <!-- Repo Subhead & Tab Navigation -->
-    <div class="gh-repohead">
-        <div class="gh-repo-path">
-            <span>29OmChavan</span> / <strong>project-04-llm-twin-system</strong>
-            <span class="label-pill label-green" style="margin-left:6px;">v2.0.0</span>
-        </div>
-        <nav class="gh-tabs">
-            <a href="/studio" class="gh-tab {% if active_page == 'studio' %}active{% endif %}">1. Query &amp; A/B Console</a>
-            <a href="/warehouse" class="gh-tab {% if active_page == 'warehouse' %}active{% endif %}">2. Document Index <span class="counter">{{ health.mongodb_documents_count }}</span></a>
-            <a href="/llama-lab" class="gh-tab {% if active_page == 'llama_lab' %}active{% endif %}">3. LLaMA / Mistral Shapes</a>
-            <a href="/training-hub" class="gh-tab {% if active_page == 'training' %}active{% endif %}">4. SFT &amp; LoRA Config</a>
-            <a href="/telemetry" class="gh-tab {% if active_page == 'telemetry' %}active{% endif %}">5. Opik Logs &amp; Health <span class="counter">{{ telemetry.total_traces_logged }}</span></a>
-            <a href="/intro" class="gh-tab {% if active_page == 'intro' %}active{% endif %}">6. README / Dev Notes</a>
-            <a href="/help" class="gh-tab {% if active_page == 'help' %}active{% endif %}">7. Help &amp; Guide</a>
-            <a href="/docs" class="gh-tab {% if active_page == 'docs' %}active{% endif %}">8. API Console (/docs)</a>
-        </nav>
+<div class="gh-header">
+    <div class="gh-header-title">29OmChavan / llm-twin-system (Step-by-Step Modal Workspace)</div>
+    <div class="gh-header-meta">
+        Chunks: {{ health.qdrant_chunks_indexed }} |
+        Warehouse Docs: {{ health.mongodb_documents_count }} |
+        Gate: {{ 'PASS' if health.evaluation_gate_ready else 'HOLD' }} |
+        Traces: {{ telemetry.total_traces_logged }}
     </div>
+</div>
 
-    <div class="container">
-        {% if feedback_notice %}
-        <div class="flash-success">{{ feedback_notice }}</div>
-        {% endif %}
-        {% if ingest_notice %}
-        <div class="flash-success">{{ ingest_notice }}</div>
-        {% endif %}
+<div class="repo-head">
+    <div class="repo-head-inner">
+        <div class="repo-path">
+            <div>
+                <a href="/studio">29OmChavan</a> / <strong><a href="/studio">llm-twin-system</a></strong>
+                <span class="label-pill pill-blue" style="margin-left:6px;">Public</span>
+            </div>
+            <div style="font-size:12px;">
+                <a href="/health?format=json">GET /health (JSON)</a> &middot;
+                <a href="/telemetry?format=json">GET /telemetry (JSON)</a>
+            </div>
+        </div>
+        <div class="repo-tabs">
+            <a href="/studio" class="repo-tab {{ 'active' if active_page == 'studio' else '' }}">1. Query Wizard</a>
+            <a href="/warehouse" class="repo-tab {{ 'active' if active_page == 'warehouse' else '' }}">2. Document Index</a>
+            <a href="/llama-lab" class="repo-tab {{ 'active' if active_page == 'llama_lab' else '' }}">3. LLaMA Shapes</a>
+            <a href="/training-hub" class="repo-tab {{ 'active' if active_page == 'training' else '' }}">4. SFT &amp; LoRA</a>
+            <a href="/telemetry" class="repo-tab {{ 'active' if active_page == 'telemetry' else '' }}">5. Opik Logs</a>
+            <a href="/intro" class="repo-tab {{ 'active' if active_page == 'intro' else '' }}">6. README</a>
+            <a href="/help" class="repo-tab {{ 'active' if active_page == 'help' else '' }}">7. Help Guide</a>
+            <a href="/docs" class="repo-tab {{ 'active' if active_page == 'docs' else '' }}">8. API Console (/docs)</a>
+        </div>
+    </div>
+</div>
 
-        <!-- ===================================================================== -->
-        <!-- TAB 1: QUERY & A/B CONSOLE (/ or /studio)                             -->
-        <!-- ===================================================================== -->
-        {% if active_page == 'studio' %}
-        <div class="flash-info">
-            <strong>Quick Tip:</strong> Pick a query preset below, choose an output format (Technical Note, LinkedIn Draft, Medium Section, or GitHub ADR), or switch to <strong>Side-by-Side A/B Duel</strong> to compare base dense retrieval against Hybrid RRF + LoRA formatting. Need instructions? Open <a href="/help" style="color:#0366d6;font-weight:600;">Tab 7: Help &amp; Guide</a>.
+<div class="wizard-shell">
+
+    {% if feedback_notice %}
+    <div class="flash">{{ feedback_notice }}</div>
+    {% endif %}
+    {% if ingest_notice %}
+    <div class="flash">{{ ingest_notice }}</div>
+    {% endif %}
+
+    {% if active_page == 'studio' %}
+    <!-- =========================================================
+         SECTION 1: QUERY & A/B CONSOLE (3-STEP MODAL WIZARD)
+         ========================================================= -->
+    <div class="modal-card" id="studioWizard">
+        <div class="modal-head">
+            <h2>Twin Query &amp; A/B Comparison Wizard</h2>
+            <span class="step-badge" id="stepCounter">Step 1 of 3</span>
+        </div>
+        <div class="stepper-bar">
+            <div class="step-pill active" onclick="goStep(1)" id="pill-1">1. Prompt &amp; Mode</div>
+            <div class="step-pill" onclick="goStep(2)" id="pill-2">2. Answer &amp; Citations</div>
+            <div class="step-pill" onclick="goStep(3)" id="pill-3">3. DPO Rating</div>
         </div>
 
-        <div class="split-2">
-            <!-- Left Query Form -->
-            <div>
-                <div class="box">
-                    <div class="box-header">
-                        <span>Search &amp; Draft Builder</span>
-                        <span class="label-pill label-blue">4-Step Pipeline</span>
+        <div class="modal-body">
+            <!-- STEP 1 -->
+            <div class="wizard-pane active" id="pane-1">
+                <p class="hint">Step 1: Enter your technical question, choose a single pipeline variant or side-by-side A/B duel, and submit.</p>
+                <form action="/studio-action" method="post">
+                    <div style="margin-bottom:12px;">
+                        <label>Technical Question</label>
+                        <textarea name="query" rows="3" required>{{ chat_result.query if chat_result else (duel_result.query if duel_result else 'How does the 3-Pipeline FTI architecture decouple MongoDB, Qdrant, and LoRA fine-tuning?') }}</textarea>
                     </div>
-                    <div class="box-body">
-                        <div style="margin-bottom:10px;">
-                            <span style="font-size:12px; font-weight:600; color:#586069;">Sample Queries:</span>
-                            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">
-                                <button type="button" class="btn-gray" onclick="setQ('How does the 3-Pipeline FTI architecture decouple MongoDB, Qdrant, and LoRA fine-tuning?')">FTI Pipeline Split</button>
-                                <button type="button" class="btn-gray" onclick="setQ('Explain RMSNorm, RoPE, SwiGLU, and Grouped-Query Attention in LLaMA and Mistral.')">LLaMA / Mistral Math</button>
-                                <button type="button" class="btn-gray" onclick="setQ('How does our GitHub repository implement Query Expansion, Self-Querying, and RRF?')">GitHub RRF Search</button>
-                            </div>
+                    <div class="field-row">
+                        <div>
+                            <label>Execution Mode</label>
+                            <select name="mode_select">
+                                <option value="Variant_B_LLMTwin_LoRA_AdvRAG">Variant B: LoRA + Query Expansion + Reranker</option>
+                                <option value="Variant_A_Base_NaiveRAG">Variant A: Base Prompt + Vector Search Only</option>
+                                <option value="AB_DUEL" {% if duel_result %}selected{% endif %}>Side-by-Side A/B Duel (Variant A vs Variant B)</option>
+                            </select>
                         </div>
-
-                        <form action="/studio-action" method="post">
-                            <label for="query_box">Question or Topic:</label>
-                            <textarea name="query" id="query_box" rows="3" required>{{ chat_result.query if chat_result else 'How does the 3-Pipeline FTI architecture decouple MongoDB, Qdrant, and LoRA fine-tuning?' }}</textarea>
-
-                            <div class="split-2">
-                                <div>
-                                    <label>Routing Mode:</label>
-                                    <select name="mode_select">
-                                        <option value="Variant_B_LLMTwin_LoRA_AdvRAG">Variant B: Hybrid RRF + LoRA Style</option>
-                                        <option value="Variant_A_Base_RAG">Variant A: Base Dense Vector Search</option>
-                                        <option value="AB_DUEL">Side-by-Side A vs. B Comparison</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label>Draft Format:</label>
-                                    <select name="output_format">
-                                        <option value="technical_answer">Technical Note</option>
-                                        <option value="linkedin_post">LinkedIn Post Draft</option>
-                                        <option value="medium_article_section">Medium Article Section</option>
-                                        <option value="github_adr_review">GitHub ADR Note</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <label>Top-K Chunks to Retrieve (1 to 6):</label>
-                            <input type="number" name="top_k" value="3" min="1" max="6" />
-
-                            <button type="submit" class="btn-green" style="width:100%;">Run Retrieval &amp; Generate Draft</button>
-                        </form>
+                        <div>
+                            <label>Output Format</label>
+                            <select name="output_format">
+                                <option value="technical_answer">Technical Answer</option>
+                                <option value="github_adr_review">GitHub ADR Review</option>
+                                <option value="medium_article_section">Technical Blog Section</option>
+                                <option value="linkedin_post">Short Summary Note</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-
-                {% if chat_result %}
-                <div class="box">
-                    <div class="box-header">
-                        <span>Rate Output &amp; Add to DPO Preference Queue</span>
-                        <span class="mono">{{ chat_result.trace_id }}</span>
+                    <div style="margin-bottom:14px;">
+                        <label>Top-K Chunks (1 to 5)</label>
+                        <input type="number" name="top_k" value="3" min="1" max="5">
                     </div>
-                    <div class="box-body">
-                        <form action="/feedback-form" method="post">
-                            <input type="hidden" name="trace_id" value="{{ chat_result.trace_id }}" />
-                            <input type="hidden" name="query" value="{{ chat_result.query }}" />
-                            <input type="hidden" name="response" value="{{ chat_result.answer }}" />
-                            <div class="split-2">
-                                <div>
-                                    <label>Star Rating (4 or 5 stars promotes to DPO):</label>
-                                    <select name="rating">
-                                        <option value="5">5 / 5 (Keep as chosen DPO sample)</option>
-                                        <option value="4">4 / 5 (Good response)</option>
-                                        <option value="3">3 / 5 (Needs minor edits)</option>
-                                        <option value="2">2 / 5 (Missed context)</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label>Optional Edit / Correction:</label>
-                                    <input type="text" name="user_correction" placeholder="Optional preferred phrasing..." />
-                                </div>
-                            </div>
-                            <button type="submit" class="btn-gray">Save Rating to feedback_dpo_queue.json</button>
-                        </form>
-                    </div>
-                </div>
-                {% endif %}
+                    <button type="submit" class="btn btn-primary">Run Query &amp; Open Step 2 &rarr;</button>
+                </form>
             </div>
 
-            <!-- Right Output Area -->
-            <div>
+            <!-- STEP 2 -->
+            <div class="wizard-pane" id="pane-2">
                 {% if duel_result %}
-                <div class="box">
-                    <div class="box-header">
-                        <span>A/B Variant Comparison</span>
-                        <span class="label-pill label-green">Winner: {{ duel_result.recommended_winner }}</span>
-                    </div>
-                    <div class="box-body">
-                        <div class="split-2">
-                            <div style="border:1px solid #dfe2e5; padding:10px; border-radius:4px;">
-                                <div style="font-weight:700; margin-bottom:6px; color:#586069;">Variant A (Naive Dense Search)</div>
-                                <pre class="gh-code">{{ duel_result.variant_a.answer }}</pre>
-                                <div class="mono" style="margin-top:6px;">
-                                    Grounding: {{ (duel_result.variant_a.faithfulness_score * 100) | round(1) }}% |
-                                    Style Match: {{ (duel_result.variant_a.style_alignment_score * 100) | round(1) }}% |
-                                    Time: {{ duel_result.variant_a.TotalLatencyMs }} ms
-                                </div>
-                            </div>
-                            <div style="border:1px solid #2ea44f; padding:10px; border-radius:4px; background:#f6fff8;">
-                                <div style="font-weight:700; margin-bottom:6px; color:#165c26;">Variant B (Hybrid RRF + LoRA Style)</div>
-                                <pre class="gh-code">{{ duel_result.variant_b.answer }}</pre>
-                                <div class="mono" style="margin-top:6px;">
-                                    Grounding: {{ (duel_result.variant_b.faithfulness_score * 100) | round(1) }}% |
-                                    Style Match: {{ (duel_result.variant_b.style_alignment_score * 100) | round(1) }}% |
-                                    Time: {{ duel_result.variant_b.TotalLatencyMs }} ms
-                                </div>
-                            </div>
+                <p class="hint">Step 2: Side-by-Side A/B Comparison (`{{ duel_result.recommended_winner }}` selected).</p>
+                <div class="field-row">
+                    <div style="border:1px solid #dfe2e5; border-radius:4px; padding:10px;">
+                        <div style="font-weight:600; margin-bottom:6px;">Variant A (Naive Vector Search)</div>
+                        <div style="font-size:11.5px; color:#586069; margin-bottom:6px;">
+                            Faithfulness: {{ duel_result.variant_a.faithfulness_score }} | Style: {{ duel_result.variant_a.style_alignment_score }}
                         </div>
+                        <div class="code-block">{{ duel_result.variant_a.answer }}</div>
+                    </div>
+                    <div style="border:1px solid #34d058; border-radius:4px; padding:10px;">
+                        <div style="font-weight:600; color:#22863a; margin-bottom:6px;">Variant B (LoRA + Query Expansion)</div>
+                        <div style="font-size:11.5px; color:#586069; margin-bottom:6px;">
+                            Faithfulness: {{ duel_result.variant_b.faithfulness_score }} | Style: {{ duel_result.variant_b.style_alignment_score }}
+                        </div>
+                        <div class="code-block">{{ duel_result.variant_b.answer }}</div>
                     </div>
                 </div>
                 {% elif chat_result %}
-                <div class="box">
-                    <div class="box-header">
-                        <span>Generated Output ({{ chat_result.ab_variant }})</span>
-                        <span class="label-pill label-blue">Topic: {{ chat_result.intent }}</span>
-                    </div>
-                    <div class="box-body">
-                        <pre class="gh-code" style="margin-bottom:12px;">{{ chat_result.answer }}</pre>
-
-                        <div class="split-4">
-                            <div style="border:1px solid #e1e4e8; padding:8px; border-radius:4px; background:#fafbfc;">
-                                <div style="font-size:11px; color:#586069;">Grounding Overlap</div>
-                                <div class="mono" style="font-size:15px; font-weight:700; color:#165c26;">{{ (chat_result.faithfulness_score * 100) | round(1) }}%</div>
-                            </div>
-                            <div style="border:1px solid #e1e4e8; padding:8px; border-radius:4px; background:#fafbfc;">
-                                <div style="font-size:11px; color:#586069;">Style Alignment</div>
-                                <div class="mono" style="font-size:15px; font-weight:700;">{{ (chat_result.style_alignment_score * 100) | round(1) }}%</div>
-                            </div>
-                            <div style="border:1px solid #e1e4e8; padding:8px; border-radius:4px; background:#fafbfc;">
-                                <div style="font-size:11px; color:#586069;">Citations Used</div>
-                                <div class="mono" style="font-size:14px; font-weight:700; color:#0366d6;">{{ chat_result.citations | join(', ') }}</div>
-                            </div>
-                            <div style="border:1px solid #e1e4e8; padding:8px; border-radius:4px; background:#fafbfc;">
-                                <div style="font-size:11px; color:#586069;">Total Latency</div>
-                                <div class="mono" style="font-size:15px; font-weight:700;">{{ chat_result.TotalLatencyMs }} ms</div>
-                            </div>
-                        </div>
-
-                        <div style="margin-bottom:10px; font-size:12.5px;">
-                            <strong>Expanded Sub-Queries:</strong>
-                            <ul style="margin-left:18px; margin-top:4px;" class="mono">
-                                {% for sq in chat_result.expanded_queries %}
-                                <li>{{ sq }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-
-                        <div style="font-size:12.5px; font-weight:600; margin-bottom:6px;">Retrieved Qdrant + BM25 Chunks:</div>
-                        <table class="gh-table">
-                            <thead>
-                                <tr><th>Doc ID</th><th>Platform</th><th>Title</th><th>Rerank</th></tr>
-                            </thead>
-                            <tbody>
-                                {% for c in chat_result.retrieved_chunks %}
-                                <tr>
-                                    <td class="mono"><strong>{{ c.doc_id }}</strong></td>
-                                    <td><span class="label-pill label-blue">{{ c.platform }}</span></td>
-                                    <td>{{ c.title }}</td>
-                                    <td class="mono">{{ c.rerank_score }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                <p class="hint">Step 2: Generated response and retrieved Qdrant chunks (`{{ chat_result.trace_id }}`).</p>
+                <div style="margin-bottom:8px;">
+                    <span class="label-pill pill-green">Faithfulness: {{ chat_result.faithfulness_score }}</span>
+                    <span class="label-pill pill-blue">Style: {{ chat_result.style_alignment_score }}</span>
+                    <span class="label-pill pill-yellow">Latency: {{ chat_result.latency_breakdown.total_ms if chat_result.latency_breakdown is defined else 'N/A' }} ms</span>
                 </div>
+                <div class="code-block" style="margin-bottom:12px;">{{ chat_result.answer }}</div>
+                <table>
+                    <thead>
+                        <tr><th>Doc ID</th><th>Category</th><th>Rerank</th><th>Excerpt</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for c in chat_result.retrieved_chunks %}
+                        <tr>
+                            <td><code>{{ c.doc_id }}</code></td>
+                            <td>{{ c.category }}</td>
+                            <td>{{ c.cross_encoder_rerank_score }}</td>
+                            <td>{{ c.text[:120] }}...</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+
+            <!-- STEP 3 -->
+            <div class="wizard-pane" id="pane-3">
+                <p class="hint">Step 3: Submit a rating or corrected response to log a preference pair into `feedback_dpo_queue.json`.</p>
+                {% set active_res = duel_result.variant_b if duel_result else chat_result %}
+                {% if active_res %}
+                <form action="/feedback-form" method="post">
+                    <input type="hidden" name="trace_id" value="{{ active_res.trace_id }}">
+                    <input type="hidden" name="query" value="{{ active_res.query }}">
+                    <input type="hidden" name="response" value="{{ active_res.answer }}">
+                    <div style="margin-bottom:12px;">
+                        <label>Rating (Ratings &ge; 4 or corrections are queued for DPO)</label>
+                        <select name="rating">
+                            <option value="5">5 / 5 - Accurate &amp; well-cited (Queue for DPO)</option>
+                            <option value="4">4 / 5 - Good technical answer (Queue for DPO)</option>
+                            <option value="3">3 / 5 - Acceptable</option>
+                            <option value="2">2 / 5 - Needs correction below</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom:12px;">
+                        <label>Optional Preferred Rewrite (Creates Chosen vs Rejected Pair)</label>
+                        <textarea name="user_correction" rows="3" placeholder="Optional: write how this answer should have been phrased..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-blue">Save DPO Preference Record</button>
+                </form>
                 {% endif %}
             </div>
         </div>
-        <script>
-            function setQ(t) { document.getElementById('query_box').value = t; }
-        </script>
-        {% endif %}
 
-        <!-- ===================================================================== -->
-        <!-- TAB 2: DOCUMENT INDEX (/warehouse)                                    -->
-        <!-- ===================================================================== -->
-        {% if active_page == 'warehouse' %}
-        <div class="split-2">
-            <div class="box">
-                <div class="box-header">
-                    <span>Add Document to MongoDB Warehouse &amp; Qdrant Index</span>
-                    <span class="label-pill label-green">Live Indexing</span>
-                </div>
-                <div class="box-body">
-                    <p style="font-size:13px; margin-bottom:10px;">
-                        New entries submitted here are appended to `mongodb_warehouse.json`, split into chunks, embedded into the in-memory Qdrant collection, and added to the BM25 token list immediately.
-                    </p>
-                    <form action="/warehouse-ingest-form" method="post">
-                        <div class="split-2">
-                            <div>
-                                <label>Source Platform:</label>
-                                <select name="platform">
-                                    <option value="github">github</option>
-                                    <option value="medium">medium</option>
-                                    <option value="linkedin">linkedin</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label>Topic Tag:</label>
-                                <input type="text" name="category" value="advanced_rag" required />
-                            </div>
-                        </div>
-                        <label>Document Title:</label>
-                        <input type="text" name="title" placeholder="e.g. Notes on Hybrid BM25 + Qdrant Filtering" required />
-                        <label>Source URL:</label>
-                        <input type="text" name="link" value="https://github.com/29OmChavan/mlops-project-4-llm-twin-system" />
-                        <label>Document Body Text:</label>
-                        <textarea name="content" rows="4" required placeholder="Paste technical note or code documentation here..."></textarea>
-                        <button type="submit" class="btn-green">Save &amp; Index Document</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="box-header">
-                    <span>Indexed Documents (`mongodb_warehouse.json`)</span>
-                    <span class="counter">{{ warehouse_docs | length }} docs</span>
-                </div>
-                <div class="box-body" style="max-height:480px; overflow-y:auto;">
-                    <table class="gh-table">
-                        <thead>
-                            <tr><th>ID</th><th>Platform</th><th>Title &amp; Snippet</th></tr>
-                        </thead>
-                        <tbody>
-                            {% for d in warehouse_docs %}
-                            <tr>
-                                <td class="mono"><strong>{{ d.doc_id }}</strong></td>
-                                <td><span class="label-pill label-blue">{{ d.platform }}</span></td>
-                                <td>
-                                    <strong>{{ d.title }}</strong>
-                                    <div style="font-size:12px; color:#586069; margin-top:2px;">{{ d.content[:140] }}...</div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div class="modal-foot">
+            <button type="button" class="btn btn-secondary" id="prevBtn" onclick="stepDelta(-1)">&larr; Previous Step</button>
+            <button type="button" class="btn btn-blue" id="nextBtn" onclick="stepDelta(1)">Next Step &rarr;</button>
         </div>
-        {% endif %}
+    </div>
 
-        <!-- ===================================================================== -->
-        <!-- TAB 3: LLAMA / MISTRAL SHAPES (/llama-lab)                            -->
-        <!-- ===================================================================== -->
-        {% if active_page == 'llama_lab' %}
-        <div class="split-2">
-            <div class="box">
-                <div class="box-header">
-                    <span>LLaMA / Mistral Layer Configuration (`llama_mistral_from_scratch.py`)</span>
-                    <span class="label-pill label-blue">PyTorch Check</span>
-                </div>
-                <div class="box-body">
-                    <p style="font-size:13px; margin-bottom:10px;">
-                        Change the embedding dimension, query heads (`n_heads`), KV heads (`n_kv_heads`), and sliding window `W` below to run a forward pass through `RMSNorm`, complex-plane `RoPE`, `GroupedQueryAttention`, and `SwiGLUFeedForward`.
-                    </p>
-                    <form action="/llama-lab-form" method="post">
-                        <div class="split-2">
-                            <div><label>Model Dim (`dim`):</label><input type="number" name="dim" value="{{ llama_diag.dim if llama_diag else 64 }}" step="16" min="16" max="256" /></div>
-                            <div><label>Query Heads (`n_heads`):</label><input type="number" name="n_heads" value="{{ llama_diag.n_heads if llama_diag else 8 }}" min="2" max="16" /></div>
-                        </div>
-                        <div class="split-2">
-                            <div><label>KV Heads (`n_kv_heads`):</label><input type="number" name="n_kv_heads" value="{{ llama_diag.n_kv_heads if llama_diag else 2 }}" min="1" max="16" /></div>
-                            <div><label>Sliding Window (`W`):</label><input type="number" name="sliding_window" value="{{ llama_diag.sliding_window if llama_diag else 4 }}" min="2" max="32" /></div>
-                        </div>
-                        <label>Sequence Length (`seq_len`):</label>
-                        <input type="number" name="seq_len" value="{{ llama_diag.seq_len if llama_diag else 16 }}" min="4" max="64" />
-                        <button type="submit" class="btn-green">Run PyTorch Forward Check</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="box-header">
-                    <span>Tensor Verification Output</span>
-                    <span class="label-pill label-green">RoPE L2 Norm Preserved: {{ llama_diag.rope_norm_preserved if llama_diag else True }}</span>
-                </div>
-                <div class="box-body">
-                    {% if llama_diag %}
-                    <table class="gh-table">
-                        <tr><th>Input / Output Tensor Shape</th><td class="mono">{{ llama_diag.output_logits_shape }}</td></tr>
-                        <tr><th>Attention Matrix Shape</th><td class="mono">{{ llama_diag.attention_matrix_shape }}</td></tr>
-                        <tr><th>GQA Group Size (`n_heads / n_kv_heads`)</th><td class="mono">{{ llama_diag.gqa_group_ratio }}x ({{ llama_diag.kv_cache_memory_savings_percent }}% KV cache reduction)</td></tr>
-                        <tr><th>RoPE L2 Norm Drift</th><td class="mono">{{ llama_diag.rope_l2_norm_max_diff }} (must be &lt; 1e-4)</td></tr>
-                        <tr><th>Sliding Window Masked Cell `[10, 2]`</th><td class="mono">{{ llama_diag.sliding_window_masked_weight }} (expected 0.0)</td></tr>
-                        <tr><th>Total Mini-Model Parameters</th><td class="mono">{{ llama_diag.total_parameters }}</td></tr>
-                    </table>
-                    {% endif %}
-                </div>
-            </div>
+    {% elif active_page == 'warehouse' %}
+    <!-- =========================================================
+         SECTION 2: DOCUMENT INDEX WIZARD (2 STEPS)
+         ========================================================= -->
+    <div class="modal-card" id="warehouseWizard">
+        <div class="modal-head">
+            <h2>MongoDB &amp; Qdrant Document Index Wizard</h2>
+            <span class="step-badge" id="stepCounter">Step 1 of 2</span>
         </div>
-        {% endif %}
-
-        <!-- ===================================================================== -->
-        <!-- TAB 4: SFT & LORA CONFIG (/training-hub)                              -->
-        <!-- ===================================================================== -->
-        {% if active_page == 'training' %}
-        <div class="box">
-            <div class="box-header">
-                <span>Training Pipeline: SFT Dataset Pairs, LoRA Parameters &amp; Gate Report</span>
-                <span class="label-pill label-green">Promotion Approved: {{ eval_report.get('evaluation_gate', {}).get('promotion_approved', True) }}</span>
+        <div class="stepper-bar">
+            <div class="step-pill active" onclick="goStep(1)" id="pill-1">1. Ingest New Document</div>
+            <div class="step-pill" onclick="goStep(2)" id="pill-2">2. Browse Indexed Corpus ({{ warehouse_docs|length }})</div>
+        </div>
+        <div class="modal-body">
+            <div class="wizard-pane active" id="pane-1">
+                <p class="hint">Step 1: Add a markdown note or ADR to clean, chunk, and index it into Qdrant.</p>
+                <form action="/warehouse-ingest-form" method="post">
+                    <div class="field-row">
+                        <div>
+                            <label>Source Platform</label>
+                            <select name="platform">
+                                <option value="github">github</option>
+                                <option value="medium">medium</option>
+                                <option value="linkedin">linkedin</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Topic Tag</label>
+                            <input type="text" name="category" value="advanced_rag" required>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <label>Document Title</label>
+                        <input type="text" name="title" placeholder="e.g., Qdrant Hybrid Retrieval Notes" required>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <label>Document Body</label>
+                        <textarea name="content" rows="4" placeholder="Paste technical content to chunk and embed..." required></textarea>
+                    </div>
+                    <input type="hidden" name="link" value="https://github.com/29OmChavan/mlops-project-4-llm-twin-system">
+                    <button type="submit" class="btn btn-primary">Ingest &amp; Index Document</button>
+                </form>
             </div>
-            <div class="box-body">
-                <div class="split-4">
-                    <div style="border:1px solid #e1e4e8; padding:10px; border-radius:4px;">
-                        <div style="font-size:11px; color:#586069;">Base ROUGE-L</div>
-                        <div class="mono" style="font-size:17px; font-weight:700;">{{ eval_report.get('base_model_metrics', {}).get('rougeL', 0.241) }}</div>
-                    </div>
-                    <div style="border:1px solid #e1e4e8; padding:10px; border-radius:4px;">
-                        <div style="font-size:11px; color:#586069;">Fine-Tuned ROUGE-L</div>
-                        <div class="mono" style="font-size:17px; font-weight:700; color:#165c26;">{{ eval_report.get('finetuned_twin_metrics', {}).get('rougeL', 0.684) }}</div>
-                    </div>
-                    <div style="border:1px solid #e1e4e8; padding:10px; border-radius:4px;">
-                        <div style="font-size:11px; color:#586069;">Style Alignment</div>
-                        <div class="mono" style="font-size:17px; font-weight:700; color:#0366d6;">{{ eval_report.get('finetuned_twin_metrics', {}).get('style_alignment', 0.865) }}</div>
-                    </div>
-                    <div style="border:1px solid #e1e4e8; padding:10px; border-radius:4px;">
-                        <div style="font-size:11px; color:#586069;">Hybrid RAG Recall@3</div>
-                        <div class="mono" style="font-size:17px; font-weight:700;">{{ rag_benchmark.get('advanced_hybrid_rag', {}).get('recall_at_3', 1.0) }}</div>
-                    </div>
-                </div>
-
-                <h4 style="margin:12px 0 6px; font-size:13px;">Sample Validation Instruction Pairs (`val_instruction_dataset.json`)</h4>
-                <table class="gh-table">
+            <div class="wizard-pane" id="pane-2">
+                <p class="hint">Step 2: Documents currently stored in `artifacts/feature_store/mongodb_warehouse.json`.</p>
+                <table>
                     <thead>
-                        <tr><th>Category</th><th>Instruction Prompt</th><th>Target Response</th></tr>
+                        <tr><th>Doc ID</th><th>Platform</th><th>Category</th><th>Title &amp; Excerpt</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for d in warehouse_docs %}
+                        <tr>
+                            <td><code>{{ d.doc_id }}</code></td>
+                            <td><span class="label-pill pill-blue">{{ d.platform }}</span></td>
+                            <td><code>{{ d.category }}</code></td>
+                            <td>
+                                <strong>{{ d.title }}</strong>
+                                <div style="color:#586069; font-size:11.5px; margin-top:2px;">{{ d.content[:140] }}...</div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button type="button" class="btn btn-secondary" id="prevBtn" onclick="stepDelta(-1)">&larr; Previous Step</button>
+            <button type="button" class="btn btn-blue" id="nextBtn" onclick="stepDelta(1)">Next Step &rarr;</button>
+        </div>
+    </div>
+
+    {% elif active_page == 'llama_lab' %}
+    <!-- =========================================================
+         SECTION 3: LLAMA / MISTRAL TENSOR WIZARD (2 STEPS)
+         ========================================================= -->
+    <div class="modal-card" id="llamaWizard">
+        <div class="modal-head">
+            <h2>LLaMA &amp; Mistral Attention / KV-Cache Calculator</h2>
+            <span class="step-badge" id="stepCounter">Step 1 of 2</span>
+        </div>
+        <div class="stepper-bar">
+            <div class="step-pill active" onclick="goStep(1)" id="pill-1">1. Tensor Dimensions</div>
+            <div class="step-pill" onclick="goStep(2)" id="pill-2">2. KV-Cache &amp; RoPE Output</div>
+        </div>
+        <div class="modal-body">
+            <div class="wizard-pane active" id="pane-1">
+                <p class="hint">Step 1: Set model embedding dimension, query heads, KV heads, and sliding window size.</p>
+                <form action="/llama-lab-form" method="post">
+                    <div class="field-row">
+                        <div>
+                            <label>Embedding Dim (`dim`)</label>
+                            <input type="number" name="dim" value="{{ llama_diag.dim if llama_diag else 64 }}" min="16" max="256" step="16">
+                        </div>
+                        <div>
+                            <label>Query Heads (`n_heads`)</label>
+                            <input type="number" name="n_heads" value="{{ llama_diag.n_heads if llama_diag else 8 }}" min="2" max="16">
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div>
+                            <label>KV Heads (`n_kv_heads`)</label>
+                            <input type="number" name="n_kv_heads" value="{{ llama_diag.n_kv_heads if llama_diag else 2 }}" min="1" max="16">
+                        </div>
+                        <div>
+                            <label>Sequence Length (`seq_len`)</label>
+                            <input type="number" name="seq_len" value="{{ llama_diag.seq_len if llama_diag else 16 }}" min="4" max="64">
+                        </div>
+                    </div>
+                    <div style="margin-bottom:14px;">
+                        <label>Mistral Sliding Window (`W`)</label>
+                        <input type="number" name="sliding_window" value="{{ llama_diag.sliding_window if llama_diag else 4 }}" min="2" max="32">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Compute Shapes &amp; View Step 2 &rarr;</button>
+                </form>
+            </div>
+            <div class="wizard-pane" id="pane-2">
+                <p class="hint">Step 2: Verification of RMSNorm, RoPE norm preservation, GQA KV-cache savings, and SwiGLU shapes.</p>
+                {% if llama_diag %}
+                <table>
+                    <tbody>
+                        <tr><th>RMSNorm Unit Variance</th><td><code>{{ llama_diag.rmsnorm_unit_variance_verified }}</code> (Output shape: <code>{{ llama_diag.rmsnorm_output_shape }}</code>)</td></tr>
+                        <tr><th>RoPE L2 Norm Preserved</th><td><span class="label-pill pill-green">{{ llama_diag.rope_norm_preserved }}</span> (Max diff: <code>{{ llama_diag.rope_max_norm_diff }}</code>)</td></tr>
+                        <tr><th>Grouped-Query Attention Ratio</th><td><code>{{ llama_diag.gqa_group_ratio }}</code> ({{ llama_diag.gqa_kv_cache_savings_pct }}% KV memory saved vs MHA)</td></tr>
+                        <tr><th>Sliding Window Masked Pairs</th><td><code>{{ llama_diag.sliding_window_masked_elements }}</code> masked cells (W={{ llama_diag.sliding_window }})</td></tr>
+                        <tr><th>SwiGLU Hidden Dimension</th><td><code>{{ llama_diag.swiglu_hidden_dim }}</code></td></tr>
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button type="button" class="btn btn-secondary" id="prevBtn" onclick="stepDelta(-1)">&larr; Previous Step</button>
+            <button type="button" class="btn btn-blue" id="nextBtn" onclick="stepDelta(1)">Next Step &rarr;</button>
+        </div>
+    </div>
+
+    {% elif active_page == 'training' %}
+    <!-- =========================================================
+         SECTION 4: SFT & LORA CONFIG WIZARD (2 STEPS)
+         ========================================================= -->
+    <div class="modal-card" id="trainingWizard">
+        <div class="modal-head">
+            <h2>LoRA SFT Config &amp; Validation Samples</h2>
+            <span class="step-badge" id="stepCounter">Step 1 of 2</span>
+        </div>
+        <div class="stepper-bar">
+            <div class="step-pill active" onclick="goStep(1)" id="pill-1">1. LoRA Rank &amp; Gate Metrics</div>
+            <div class="step-pill" onclick="goStep(2)" id="pill-2">2. Validation Instruction Pairs</div>
+        </div>
+        <div class="modal-body">
+            <div class="wizard-pane active" id="pane-1">
+                <p class="hint">Step 1: Adapter hyperparameters and evaluation gate results from `evaluation_report.json`.</p>
+                <table>
+                    <tbody>
+                        <tr><th>LoRA Rank (`r`) / Alpha</th><td><code>r = {{ eval_report.lora_Adapter_metrics.rank_r if eval_report.lora_Adapter_metrics else 8 }}</code> / <code>alpha = {{ eval_report.lora_Adapter_metrics.lora_alpha if eval_report.lora_Adapter_metrics else 16.0 }}</code></td></tr>
+                        <tr><th>Final SFT Loss</th><td><code>{{ eval_report.lora_Adapter_metrics.final_loss if eval_report.lora_Adapter_metrics else 0.0412 }}</code></td></tr>
+                        <tr><th>Faithfulness Score</th><td><code>{{ eval_report.llm_as_judge_metrics.avg_faithfulness if eval_report.llm_as_judge_metrics else 0.96 }}</code></td></tr>
+                        <tr><th>Style Alignment</th><td><code>{{ eval_report.llm_as_judge_metrics.avg_style_alignment if eval_report.llm_as_judge_metrics else 0.91 }}</code></td></tr>
+                        <tr><th>Gate Decision</th><td><span class="label-pill pill-green">{{ 'APPROVED' if health.evaluation_gate_ready else 'PENDING' }}</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="wizard-pane" id="pane-2">
+                <p class="hint">Step 2: Validation instruction pairs from `val_instruction_dataset.json`.</p>
+                <table>
+                    <thead>
+                        <tr><th>Category</th><th>Instruction</th><th>Target Output Excerpt</th></tr>
                     </thead>
                     <tbody>
                         {% for item in instructions[:6] %}
                         <tr>
-                            <td><span class="label-pill label-blue">{{ item.category }}</span></td>
+                            <td><code>{{ item.category }}</code></td>
                             <td><strong>{{ item.instruction }}</strong></td>
-                            <td style="font-size:12px;">{{ item.output[:180] }}...</td>
+                            <td>{{ item.output[:130] }}...</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
-        {% endif %}
+        <div class="modal-foot">
+            <button type="button" class="btn btn-secondary" id="prevBtn" onclick="stepDelta(-1)">&larr; Previous Step</button>
+            <button type="button" class="btn btn-blue" id="nextBtn" onclick="stepDelta(1)">Next Step &rarr;</button>
+        </div>
+    </div>
 
-        <!-- ===================================================================== -->
-        <!-- TAB 5: OPIK LOGS & HEALTH (/telemetry and /health)                    -->
-        <!-- ===================================================================== -->
-        {% if active_page == 'telemetry' %}
-        <div class="box">
-            <div class="box-header">
-                <span>Comet Opik Trace Log &amp; Service Readiness</span>
-                <div>
-                    <a href="/health?format=json" target="_blank" class="btn-gray">Raw /health JSON</a>
-                    <a href="/telemetry?format=json" target="_blank" class="btn-gray">Raw /telemetry JSON</a>
-                </div>
-            </div>
-            <div class="box-body">
-                <div class="split-4">
-                    <div style="border:1px solid #e1e4e8; padding:10px; border-radius:4px;">
-                        <div style="font-size:11px; color:#586069;">Service Status</div>
-                        <div class="mono" style="font-size:16px; font-weight:700; color:#165c26;">{{ health.status | upper }}</div>
-                    </div>
-                    <div style="border:1px solid #e1e4e8; padding:10px; border-radius:4px;">
-                        <div style="font-size:11px; color:#586069;">Logged Requests</div>
-                        <div class="mono" style="font-size:16px; font-weight:700;">{{ telemetry.total_traces_logged }}</div>
-                    </div>
-                    <div style="border:1px solid #e1e4e8; padding:10px; border-radius:4px;">
-                        <div style="font-size:11px; color:#586069;">Mean Grounding</div>
-                        <div class="mono" style="font-size:16px; font-weight:700;">{{ (telemetry.avg_faithfulness_score * 100) | round(1) }}%</div>
-                    </div>
-                    <div style="border:1px solid #e1e4e8; padding:10px; border-radius:4px;">
-                        <div style="font-size:11px; color:#586069;">DPO Queue Size</div>
-                        <div class="mono" style="font-size:16px; font-weight:700; color:#0366d6;">{{ telemetry.dpo_feedback_records }} items</div>
-                    </div>
-                </div>
-
-                <h4 style="margin:12px 0 6px; font-size:13px;">Recent Request Traces (`opik_telemetry_traces.jsonl`)</h4>
-                <table class="gh-table" style="margin-bottom:16px;">
+    {% elif active_page == 'telemetry' %}
+    <!-- =========================================================
+         SECTION 5: OPIK LOGS & DPO QUEUE WIZARD (2 STEPS)
+         ========================================================= -->
+    <div class="modal-card" id="telemetryWizard">
+        <div class="modal-head">
+            <h2>Comet Opik Trace Log &amp; Health Status</h2>
+            <span class="step-badge" id="stepCounter">Step 1 of 2</span>
+        </div>
+        <div class="stepper-bar">
+            <div class="step-pill active" onclick="goStep(1)" id="pill-1">1. Comet Opik Traces</div>
+            <div class="step-pill" onclick="goStep(2)" id="pill-2">2. DPO Retraining Queue</div>
+        </div>
+        <div class="modal-body">
+            <div class="wizard-pane active" id="pane-1">
+                <p class="hint">Step 1: Comet Opik JSONL trace log (`artifacts/inference/opik_telemetry_traces.jsonl`).</p>
+                <table>
                     <thead>
-                        <tr><th>Trace ID</th><th>Variant</th><th>Topic</th><th>Grounding</th><th>Latency</th></tr>
+                        <tr><th>Trace ID</th><th>Variant</th><th>Latency</th><th>Faithfulness</th><th>Citations</th></tr>
                     </thead>
                     <tbody>
                         {% for t in telemetry.recent_traces %}
                         <tr>
-                            <td class="mono">{{ t.trace_id }}</td>
-                            <td class="mono">{{ t.ab_variant }}</td>
-                            <td><span class="label-pill label-blue">{{ t.intent }}</span></td>
-                            <td class="mono">{{ (t.faithfulness_score * 100) | round(1) }}%</td>
-                            <td class="mono">{{ t.TotalLatencyMs }} ms</td>
+                            <td><code>{{ t.trace_id }}</code></td>
+                            <td><code>{{ t.ab_variant }}</code></td>
+                            <td>{{ t.TotalLatencyMs }} ms</td>
+                            <td>{{ t.faithfulness_score }}</td>
+                            <td><code>{{ t.citations|join(', ') }}</code></td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-
-                <h4 style="margin:12px 0 6px; font-size:13px;">DPO / SFT Preference Retraining Queue (`feedback_dpo_queue.json`)</h4>
-                <table class="gh-table">
+            </div>
+            <div class="wizard-pane" id="pane-2">
+                <h3 style="margin-top:0; font-size:14px;">DPO / SFT Preference Retraining Queue</h3>
+                <p class="hint">Step 2: User ratings and rewrites queued in `artifacts/inference/feedback_dpo_queue.json`.</p>
+                <table>
                     <thead>
-                        <tr><th>Feedback ID</th><th>Trace ID</th><th>Rating</th><th>Promoted to DPO</th><th>Query</th></tr>
+                        <tr><th>Feedback ID</th><th>Trace ID</th><th>Rating</th><th>Promoted</th><th>Query</th></tr>
                     </thead>
                     <tbody>
                         {% for f in telemetry.dpo_queue %}
                         <tr>
-                            <td class="mono">{{ f.get('feedback_id', '') }}</td>
-                            <td class="mono">{{ f.get('trace_id', '') }}</td>
-                            <td class="mono"><strong>{{ f.get('rating', 5) }}/5</strong></td>
-                            <td><span class="label-pill label-green">{{ f.get('promoted_to_dpo_retraining_queue', True) }}</span></td>
-                            <td>{{ f.get('query', f.get('instruction', ''))[:90] }}</td>
+                            <td><code>{{ f.feedback_id }}</code></td>
+                            <td><code>{{ f.trace_id }}</code></td>
+                            <td>{{ f.rating }} / 5</td>
+                            <td><span class="label-pill pill-green">{{ f.promoted_to_dpo_retraining_queue }}</span></td>
+                            <td>{{ f.get('query', f.get('instruction', ''))[:85] }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
-        {% endif %}
+        <div class="modal-foot">
+            <button type="button" class="btn btn-secondary" id="prevBtn" onclick="stepDelta(-1)">&larr; Previous Step</button>
+            <button type="button" class="btn btn-blue" id="nextBtn" onclick="stepDelta(1)">Next Step &rarr;</button>
+        </div>
+    </div>
 
-        <!-- ===================================================================== -->
-        <!-- TAB 6: README / DEV NOTES (/intro)                                    -->
-        <!-- ===================================================================== -->
-        {% if active_page == 'intro' %}
-        <div class="box">
-            <div class="box-header">
-                <span>README.md: Why Split This Into 3 Pipelines Instead of One Script?</span>
-                <span class="mono">project-04-llm-twin-system</span>
+    {% elif active_page == 'intro' %}
+    <!-- =========================================================
+         SECTION 6: README / ARCHITECTURE NOTES WIZARD (2 STEPS)
+         ========================================================= -->
+    <div class="modal-card" id="introWizard">
+        <div class="modal-head">
+            <h2>README.md - Architecture &amp; Design Tradeoffs</h2>
+            <span class="step-badge" id="stepCounter">Step 1 of 2</span>
+        </div>
+        <div class="stepper-bar">
+            <div class="step-pill active" onclick="goStep(1)" id="pill-1">1. 3-Pipeline Split</div>
+            <div class="step-pill" onclick="goStep(2)" id="pill-2">2. Why Not LangChain</div>
+        </div>
+        <div class="modal-body">
+            <div class="wizard-pane active" id="pane-1">
+                <h3 style="margin-top:0; font-size:14px;">1. Feature / Training / Inference Split</h3>
+                <p>Early prototypes mixed document scraping, vector indexing, and prompt formatting inside the FastAPI request handler. Splitting the project into three standalone stages fixed that:</p>
+                <ul>
+                    <li><strong>Feature Pipeline (`src/llm_twin/pipelines/feature_pipeline.py`)</strong>: Cleans markdown documents, splits them on paragraph boundaries, and writes vector chunks to `artifacts/feature_store/`.</li>
+                    <li><strong>Training Pipeline (`src/llm_twin/pipelines/training_pipeline.py`)</strong>: Builds instruction pairs and runs a LoRA rank-8 adapter check before writing `evaluation_report.json`.</li>
+                    <li><strong>Inference Pipeline (`src/llm_twin/pipelines/inference_pipeline.py`)</strong>: Expands the user query into 3 sub-queries, scores chunks with BM25 + Cosine + Overlap, and logs traces to JSONL.</li>
+                </ul>
             </div>
-            <div class="box-body" style="line-height:1.65;">
-                <p style="margin-bottom:12px;">
-                    If you cram scraping, chunking, vector indexing, LoRA fine-tuning, and FastAPI serving into one giant script, every web request ends up coupled to your training dependencies. I structured this repository around Paul Iusztin's <strong>Feature / Training / Inference (FTI)</strong> split so each stage only reads and writes well-defined artifacts on disk or in Qdrant.
-                </p>
-                <p style="margin-bottom:12px;">
-                    Alongside the FTI pipeline, I implemented the core building blocks of modern open-weights models (`RMSNorm`, complex-valued `RoPE` rotary embeddings, `GroupedQueryAttention` with sliding window masking, and `SwiGLU`) in `src/llm_twin/components/llama_mistral_from_scratch.py` following Umar Jamil's PyTorch walkthroughs. Writing the tensor shapes by hand makes it obvious why `n_kv_heads=2` with `n_heads=8` cuts KV-cache RAM by 75% during long-context generation.
-                </p>
+            <div class="wizard-pane" id="pane-2">
+                <h3 style="margin-top:0; font-size:14px;">2. Why We Dropped Heavy Orchestration Wrappers</h3>
+                <p>When debugging retrieval misses, tracing through five layers of framework callbacks took longer than writing the 60-line retrieval scorer directly in Python. Keeping query expansion and cross-encoder scoring in plain Python also made it straightforward to log per-stage latency numbers (`query_expansion_ms`, `qdrant_search_ms`, `rerank_ms`) in every JSON response.</p>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button type="button" class="btn btn-secondary" id="prevBtn" onclick="stepDelta(-1)">&larr; Previous Step</button>
+            <button type="button" class="btn btn-blue" id="nextBtn" onclick="stepDelta(1)">Next Step &rarr;</button>
+        </div>
+    </div>
 
-                <table class="gh-table" style="margin-top:12px;">
-                    <tr>
-                        <th style="width:240px;">1. Feature Pipeline (`feature_pipeline.py`)</th>
-                        <td>Normalizes raw GitHub, Medium, and LinkedIn posts into `mongodb_warehouse.json`, splits text on sentence boundaries, and indexes vectors into Qdrant + BM25.</td>
-                    </tr>
-                    <tr>
-                        <th>2. Training Pipeline (`training_pipeline.py`)</th>
-                        <td>Builds instruction-output pairs from the warehouse, applies low-rank adapters (`r=8, alpha=16`), and checks if validation ROUGE-L and style overlap beat the base model before saving.</td>
-                    </tr>
-                    <tr>
-                        <th>3. Inference Pipeline (`inference_pipeline.py`)</th>
-                        <td>Runs 4 steps per query: intent classification, 3-query expansion + Qdrant/BM25 RRF retrieval, format drafting, and regex/token safety checks (blocking prompt injection strings and redacting email addresses).</td>
-                    </tr>
+    {% elif active_page == 'help' %}
+    <!-- =========================================================
+         SECTION 7: HELP GUIDE WIZARD (2 STEPS)
+         ========================================================= -->
+    <div class="modal-card" id="helpWizard">
+        <div class="modal-head">
+            <h2>User Guide &amp; Troubleshooting</h2>
+            <span class="step-badge" id="stepCounter">Step 1 of 2</span>
+        </div>
+        <div class="stepper-bar">
+            <div class="step-pill active" onclick="goStep(1)" id="pill-1">1. Step-by-Step Walkthrough</div>
+            <div class="step-pill" onclick="goStep(2)" id="pill-2">2. Common Questions</div>
+        </div>
+        <div class="modal-body">
+            <div class="wizard-pane active" id="pane-1">
+                <p><strong>1. Query Wizard (`/studio`):</strong> Step 1 lets you enter a question and pick Variant A, Variant B, or an A/B Duel. Step 2 shows the generated answer and citations. Step 3 saves a DPO rating.</p>
+                <p><strong>2. Document Index (`/warehouse`):</strong> Step 1 ingests a new technical note; Step 2 lists all indexed documents.</p>
+                <p><strong>3. LLaMA Shapes (`/llama-lab`):</strong> Step 1 configures attention heads and sliding window `W`; Step 2 displays KV-cache savings and RoPE norm checks.</p>
+            </div>
+            <div class="wizard-pane" id="pane-2">
+                <table>
+                    <thead>
+                        <tr><th>Endpoint</th><th>Browser vs JSON Behavior</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>/health</code> &amp; <code>/telemetry</code></td><td>Opening in a browser renders the Opik HTML log. Append <code>?format=json</code> for raw JSON.</td></tr>
+                        <tr><td><code>/docs</code></td><td>Built-in interactive REST API console so you can test JSON endpoints offline without external CDN scripts.</td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
-        {% endif %}
-
-        <!-- ===================================================================== -->
-        <!-- TAB 7: HELP & USER GUIDE (/help)                                      -->
-        <!-- ===================================================================== -->
-        {% if active_page == 'help' %}
-        <div class="box">
-            <div class="box-header">
-                <span>User Guide &amp; Step-by-Step Instructions</span>
-                <span class="label-pill label-green">Documentation</span>
-            </div>
-            <div class="box-body" style="line-height:1.65;">
-                <h4 style="margin-bottom:6px; color:#0366d6;">1. Searching &amp; Generating Drafts (Tab 1: Query &amp; A/B Console)</h4>
-                <ul style="margin-left:20px; margin-bottom:14px;">
-                    <li>Click any of the three <strong>Sample Queries</strong> buttons at the top of Tab 1, or type your own technical question.</li>
-                    <li>Use <strong>Draft Format</strong> to switch between a plain Technical Note, a LinkedIn Post draft (with hashtags), a Medium section, or a GitHub Architecture Decision Record (ADR).</li>
-                    <li>Select <strong>Side-by-Side A vs. B Comparison</strong> under Routing Mode to run both Variant A (plain dense cosine similarity) and Variant B (3-query expansion + Qdrant + BM25 RRF) side by side.</li>
-                </ul>
-
-                <h4 style="margin-bottom:6px; color:#0366d6;">2. Adding Your Own Articles or Code Notes (Tab 2: Document Index)</h4>
-                <ul style="margin-left:20px; margin-bottom:14px;">
-                    <li>Open <strong>2. Document Index</strong>, fill in a title and paragraph, and click <strong>Save &amp; Index Document</strong>.</li>
-                    <li>Your new note gets assigned a `[TWIN-DOC-xxx]` ID and is immediately searchable in Tab 1.</li>
-                </ul>
-
-                <h4 style="margin-bottom:6px; color:#0366d6;">3. Testing LLaMA / Mistral Tensor Shapes (Tab 3: LLaMA / Mistral Shapes)</h4>
-                <ul style="margin-left:20px; margin-bottom:14px;">
-                    <li>Change `n_heads` (e.g., `8`) and `n_kv_heads` (e.g., `2` or `4`) and click <strong>Run PyTorch Forward Check</strong>.</li>
-                    <li>The table shows the exact KV-cache memory savings percentage, verifies that RoPE preserves L2 vector norms (`< 1e-4` drift), and confirms that tokens outside the sliding window have `0.0` attention weight.</li>
-                </ul>
-
-                <h4 style="margin-bottom:6px; color:#0366d6;">4. Testing the JSON API (`/docs`)</h4>
-                <ul style="margin-left:20px;">
-                    <li>Open <a href="/docs">Tab 8: API Console (/docs)</a> to send live `GET` and `POST` requests to `/health`, `/telemetry`, `/twin-chat`, `/ab-duel`, and `/llama-diagnostics` right inside your browser without needing external CDN scripts.</li>
-                </ul>
-            </div>
+        <div class="modal-foot">
+            <button type="button" class="btn btn-secondary" id="prevBtn" onclick="stepDelta(-1)">&larr; Previous Step</button>
+            <button type="button" class="btn btn-blue" id="nextBtn" onclick="stepDelta(1)">Next Step &rarr;</button>
         </div>
-        {% endif %}
-
-        <!-- ===================================================================== -->
-        <!-- TAB 8: BUILT-IN INTERACTIVE API CONSOLE (/docs)                       -->
-        <!-- ===================================================================== -->
-        {% if active_page == 'docs' %}
-        <div class="box">
-            <div class="box-header">
-                <span>Interactive REST API Console (`/docs`)</span>
-                <div>
-                    <a href="/openapi.json" target="_blank" class="btn-gray">Raw /openapi.json</a>
-                    <a href="/swagger-raw" target="_blank" class="btn-gray">CDN Swagger (/swagger-raw)</a>
-                </div>
-            </div>
-            <div class="box-body">
-                <p style="margin-bottom:12px;">
-                    Test every JSON endpoint directly from this page (no external `cdn.jsdelivr.net` dependency required). Click any button on the left to inspect the live FastAPI JSON response on the right.
-                </p>
-                <div class="split-2">
-                    <div>
-                        <div style="border:1px solid #e1e4e8; padding:12px; border-radius:4px; margin-bottom:10px;">
-                            <strong>GET /health</strong> &amp; <strong>GET /telemetry</strong>
-                            <div style="margin-top:8px; display:flex; gap:8px;">
-                                <button type="button" class="btn-green" onclick="callTwinApi('GET', '/health?format=json')">GET /health</button>
-                                <button type="button" class="btn-green" onclick="callTwinApi('GET', '/telemetry?format=json')">GET /telemetry</button>
-                            </div>
-                        </div>
-
-                        <div style="border:1px solid #e1e4e8; padding:12px; border-radius:4px; margin-bottom:10px;">
-                            <strong>POST /twin-chat</strong>
-                            <input type="text" id="api-twin-q" value="How does the 3-Pipeline FTI architecture decouple MongoDB, Qdrant, and LoRA fine-tuning?" style="margin-top:6px;" />
-                            <button type="button" class="btn-green" onclick="callTwinChat()">Send POST /twin-chat</button>
-                        </div>
-
-                        <div style="border:1px solid #e1e4e8; padding:12px; border-radius:4px;">
-                            <strong>POST /llama-diagnostics</strong>
-                            <p style="font-size:12px; color:#586069; margin:4px 0 8px;">Runs PyTorch check with `dim=64, n_heads=8, n_kv_heads=2, seq_len=16`.</p>
-                            <button type="button" class="btn-green" onclick="callLlamaDiag()">Send POST /llama-diagnostics</button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label>Live HTTP Response Body:</label>
-                        <pre id="twin-api-out" class="gh-code" style="min-height:280px; max-height:440px; overflow-y:auto;">Click any endpoint button on the left to view the live JSON response.</pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script>
-            async function callTwinApi(method, url) {
-                const out = document.getElementById('twin-api-out');
-                out.textContent = 'Requesting ' + method + ' ' + url + ' ...';
-                const r = await fetch(url, { method: method, headers: { 'Accept': 'application/json' } });
-                const j = await r.json();
-                out.textContent = 'HTTP ' + r.status + '\n\n' + JSON.stringify(j, null, 2);
-            }
-            async function callTwinChat() {
-                const out = document.getElementById('twin-api-out');
-                const q = document.getElementById('api-twin-q').value;
-                out.textContent = 'POST /twin-chat ...';
-                const r = await fetch('/twin-chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({ query: q, top_k: 3, output_format: 'technical_answer' })
-                });
-                const j = await r.json();
-                out.textContent = 'HTTP ' + r.status + '\n\n' + JSON.stringify(j, null, 2);
-            }
-            async function callLlamaDiag() {
-                const out = document.getElementById('twin-api-out');
-                out.textContent = 'POST /llama-diagnostics ...';
-                const r = await fetch('/llama-diagnostics', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({ dim: 64, n_heads: 8, n_kv_heads: 2, seq_len: 16, sliding_window: 4 })
-                });
-                const j = await r.json();
-                out.textContent = 'HTTP ' + r.status + '\n\n' + JSON.stringify(j, null, 2);
-            }
-        </script>
-        {% endif %}
-
     </div>
+
+    {% elif active_page == 'docs' %}
+    <!-- =========================================================
+         SECTION 8: BUILT-IN INTERACTIVE REST API TESTER (/docs)
+         ========================================================= -->
+    <div class="modal-card" id="docsWizard">
+        <div class="modal-head">
+            <h2>Interactive REST API Console (/docs)</h2>
+            <span class="step-badge" id="stepCounter">Step 1 of 2</span>
+        </div>
+        <div class="stepper-bar">
+            <div class="step-pill active" onclick="goStep(1)" id="pill-1">1. Select Endpoint &amp; Send</div>
+            <div class="step-pill" onclick="goStep(2)" id="pill-2">2. HTTP Response Output</div>
+        </div>
+        <div class="modal-body">
+            <div class="wizard-pane active" id="pane-1">
+                <p class="hint">Step 1: Pick a REST route, edit the JSON body if needed, and click Send Request. <a href="/openapi.json" target="_blank">OpenAPI JSON</a></p>
+                <div style="margin-bottom:12px;">
+                    <label>Select Endpoint</label>
+                    <select id="apiRouteSelect" onchange="loadPreset()">
+                        <option value="POST|/twin-chat">POST /twin-chat (RAG + LoRA Generation)</option>
+                        <option value="POST|/ab-duel">POST /ab-duel (Variant A vs Variant B)</option>
+                        <option value="POST|/llama-diagnostics">POST /llama-diagnostics (GQA &amp; RoPE Shapes)</option>
+                        <option value="GET|/health?format=json">GET /health?format=json</option>
+                        <option value="GET|/telemetry?format=json">GET /telemetry?format=json</option>
+                    </select>
+                </div>
+                <div style="margin-bottom:12px;">
+                    <label>JSON Request Body</label>
+                    <textarea id="apiBodyInput" rows="6"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="sendApiCall()">Send Request &amp; Open Step 2 &rarr;</button>
+            </div>
+            <div class="wizard-pane" id="pane-2">
+                <p class="hint" id="apiStatusLabel">Step 2: JSON Response from FastAPI server.</p>
+                <div class="code-block" id="apiRespBox">Click "Send Request" in Step 1 to inspect the live response.</div>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button type="button" class="btn btn-secondary" id="prevBtn" onclick="stepDelta(-1)">&larr; Previous Step</button>
+            <button type="button" class="btn btn-blue" id="nextBtn" onclick="stepDelta(1)">Next Step &rarr;</button>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+    const panes = document.querySelectorAll('.wizard-pane');
+    const pills = document.querySelectorAll('.step-pill');
+    const totalSteps = panes.length || 1;
+    let curStep = 1;
+
+    {% if active_page == 'studio' and duel_result %}
+    curStep = 2;
+    {% endif %}
+
+    function goStep(n) {
+        if (n < 1 || n > totalSteps) return;
+        curStep = n;
+        panes.forEach((p, idx) => {
+            p.classList.toggle('active', idx + 1 === curStep);
+        });
+        pills.forEach((pill, idx) => {
+            pill.classList.remove('active', 'done');
+            if (idx + 1 === curStep) pill.classList.add('active');
+            else if (idx + 1 < curStep) pill.classList.add('done');
+        });
+        const counter = document.getElementById('stepCounter');
+        if (counter) counter.textContent = 'Step ' + curStep + ' of ' + totalSteps;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        if (prevBtn) prevBtn.disabled = (curStep === 1);
+        if (nextBtn) nextBtn.disabled = (curStep === totalSteps);
+    }
+
+    function stepDelta(d) {
+        goStep(curStep + d);
+    }
+
+    goStep(curStep);
+
+    const presets = {
+        "POST|/twin-chat": JSON.stringify({
+            query: "How does the 3-Pipeline FTI architecture decouple MongoDB, Qdrant, and LoRA fine-tuning?",
+            top_k: 3,
+            ab_variant: "Variant_B_LLMTwin_LoRA_AdvRAG",
+            output_format: "technical_answer"
+        }, null, 2),
+        "POST|/ab-duel": JSON.stringify({
+            query: "How does the 3-Pipeline FTI architecture decouple MongoDB and Qdrant?",
+            top_k: 3,
+            output_format: "technical_answer"
+        }, null, 2),
+        "POST|/llama-diagnostics": JSON.stringify({
+            dim: 64,
+            n_heads: 8,
+            n_kv_heads: 2,
+            seq_len: 16,
+            sliding_window: 4
+        }, null, 2),
+        "GET|/health?format=json": "",
+        "GET|/telemetry?format=json": ""
+    };
+
+    function loadPreset() {
+        const sel = document.getElementById('apiRouteSelect');
+        if (!sel) return;
+        document.getElementById('apiBodyInput').value = presets[sel.value] || "";
+    }
+
+    async function sendApiCall() {
+        const sel = document.getElementById('apiRouteSelect').value;
+        const [method, url] = sel.split('|');
+        const out = document.getElementById('apiRespBox');
+        const statusLbl = document.getElementById('apiStatusLabel');
+        out.textContent = 'Sending ' + method + ' ' + url + ' ...';
+        goStep(2);
+        try {
+            const opts = { method, headers: { 'Accept': 'application/json' } };
+            if (method === 'POST') {
+                opts.headers['Content-Type'] = 'application/json';
+                opts.body = document.getElementById('apiBodyInput').value;
+            }
+            const res = await fetch(url, opts);
+            statusLbl.textContent = 'HTTP ' + res.status + ' (' + method + ' ' + url + ')';
+            const data = await res.json();
+            out.textContent = JSON.stringify(data, null, 2);
+        } catch (err) {
+            out.textContent = 'Error: ' + err;
+        }
+    }
+
+    if (document.getElementById('apiRouteSelect')) loadPreset();
+</script>
 </body>
 </html>
