@@ -28,13 +28,13 @@ from src.llm_twin.utils.common import load_json
 
 
 app = FastAPI(
-    title="Om Chavan LLM Twin — Production LLMOps & Multi-Agent RAG Platform",
+    title="llm-twin-fti-pipeline (MongoDB + Qdrant + LoRA)",
     description=(
-        "3-Pipeline FTI Architecture serving Multi-Agent Advanced Hybrid RAG, "
-        "First-Principles LLaMA/Mistral Internals, PEFT LoRA Style Alignment, "
-        "A/B Testing, DPO Feedback Loop, and Comet Opik Telemetry."
+        "3-Pipeline Feature/Training/Inference service for personal code and article search, "
+        "LLaMA/Mistral layer checks, LoRA fine-tuning, and Opik request logging."
     ),
     version="2.0.0",
+    docs_url="/swagger-raw",
 )
 
 templates = Jinja2Templates(directory="templates")
@@ -231,6 +231,18 @@ def llama_lab_page(request: Request):
 @app.get("/training-hub", response_class=HTMLResponse, tags=["UI Pages"])
 def training_hub_page(request: Request):
     ctx = _build_dashboard_context(active_page="training")
+    return templates.TemplateResponse(request=request, name="index.html", context=ctx)
+
+
+@app.get("/help", response_class=HTMLResponse, tags=["UI Pages"])
+def help_page(request: Request):
+    ctx = _build_dashboard_context(active_page="help")
+    return templates.TemplateResponse(request=request, name="index.html", context=ctx)
+
+
+@app.get("/docs", response_class=HTMLResponse, tags=["UI Pages"])
+def docs_page(request: Request):
+    ctx = _build_dashboard_context(active_page="docs")
     return templates.TemplateResponse(request=request, name="index.html", context=ctx)
 
 

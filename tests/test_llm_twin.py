@@ -150,7 +150,7 @@ def test_fastapi_endpoints_and_multi_page_views():
     assert "DPO / SFT Preference Retraining Queue" in r_tel_html.text
 
     # Multi-page HTML routes check
-    for route in ["/", "/intro", "/studio", "/warehouse", "/llama-lab", "/training-hub"]:
+    for route in ["/", "/intro", "/studio", "/warehouse", "/llama-lab", "/training-hub", "/help", "/docs"]:
         resp = client.get(route)
         assert resp.status_code == 200
 

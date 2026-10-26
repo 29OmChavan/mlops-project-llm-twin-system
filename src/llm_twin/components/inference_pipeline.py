@@ -360,38 +360,38 @@ class InferencePipeline:
                 if chosen_variant == "Variant_B_LLMTwin_LoRA_AdvRAG":
                     if output_format == "linkedin_post":
                         raw_answer = (
-                            f"🚀 Production Engineering Insight ({rag_bundle['intent'].replace('_', ' ').title()})\n\n"
-                            f"In my work building {primary['title']} [{primary['doc_id']}], here is the core architectural takeaway:\n"
-                            f"• {primary['text']}\n"
+                            f"Notes on {rag_bundle['intent'].replace('_', ' ')}:\n\n"
+                            f"When working on {primary['title']} [{primary['doc_id']}], this was the main setup:\n"
+                            f"- {primary['text']}\n"
                         )
                         if secondary:
-                            raw_answer += f"• Complementary pattern from [{secondary['doc_id']}]: {secondary['title']}.\n"
-                        raw_answer += "\n#LLMOps #MLOps #ProductionAI #Qdrant #PyTorch"
+                            raw_answer += f"- Related note from [{secondary['doc_id']}]: {secondary['title']}.\n"
+                        raw_answer += "\n#LLMOps #MLOps #Qdrant #PyTorch"
                     elif output_format == "medium_article_section":
                         raw_answer = (
-                            f"### Deep-Dive: {primary['title']} [{primary['doc_id']}]\n\n"
+                            f"### Section: {primary['title']} [{primary['doc_id']}]\n\n"
                             f"{primary['text']} "
                         )
                         if secondary:
                             raw_answer += (
-                                f"\n\n**Architectural Cross-Reference ([{secondary['doc_id']} — {secondary['title']}):** "
+                                f"\n\n**Related Reference ([{secondary['doc_id']} / {secondary['title']}):** "
                                 f"{secondary['text']}"
                             )
                     elif output_format == "github_adr_review":
                         raw_answer = (
-                            f"### ADR Review · [{primary['doc_id']}] ({primary['platform']})\n"
-                            f"- **Intent**: `{rag_bundle['intent']}`\n"
-                            f"- **Verified Grounding**: {primary['text']}\n"
-                            f"- **Verdict**: Approved for production FTI pipeline deployment."
+                            f"### ADR Note [{primary['doc_id']}] ({primary['platform']})\n"
+                            f"- **Topic**: `{rag_bundle['intent']}`\n"
+                            f"- **Context**: {primary['text']}\n"
+                            f"- **Status**: Checked against repo pipeline."
                         )
                     else:
                         raw_answer = (
-                            f"[Om Chavan LLM Twin · {rag_bundle['intent']}] Grounded in {primary['title']} "
+                            f"[Topic: {rag_bundle['intent']}] From {primary['title']} "
                             f"[{primary['doc_id']}] ({primary['platform']}): {primary['text']}"
                         )
                         if secondary:
                             raw_answer += (
-                                f" Complementary architecture evidence from [{secondary['doc_id']}] "
+                                f" Also see [{secondary['doc_id']}] "
                                 f"({secondary['title']})."
                             )
                 else:
