@@ -839,11 +839,7 @@
     const panes = document.querySelectorAll('.wizard-pane');
     const pills = document.querySelectorAll('.step-pill');
     const totalSteps = panes.length || 1;
-    let curStep = 1;
-
-    {% if active_page == 'studio' and duel_result %}
-    curStep = 2;
-    {% endif %}
+    let curStep = {{ initial_step | default(1) }};
 
     function goStep(n) {
         if (n < 1 || n > totalSteps) return;
@@ -889,6 +885,7 @@
             seq_len: 16,
             sliding_window: 4
         }, null, 2),
+        "GET|/ops-diagnostics": "",
         "GET|/health?format=json": "",
         "GET|/telemetry?format=json": ""
     };

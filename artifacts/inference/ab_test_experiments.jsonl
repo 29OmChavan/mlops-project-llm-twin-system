@@ -52,3 +52,8 @@
 {"trace_id": "opik-trace-dfd07aa28710", "timestamp": "2026-10-26T13:46:39.003158+00:00", "ab_variant": "Variant_A_Base_RAG", "latency_ms": 1.13, "faithfulness_score": 0.9556, "style_alignment_score": 0.9903}
 {"trace_id": "opik-trace-cdb68271a453", "timestamp": "2026-10-26T13:46:39.007164+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 3.51, "faithfulness_score": 0.8088, "style_alignment_score": 0.9326}
 {"trace_id": "opik-trace-100dafc37b00", "timestamp": "2026-10-26T13:47:10.368458+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 5.31, "faithfulness_score": 0.8088, "style_alignment_score": 0.9326}
+{"trace_id": "opik-trace-873c68f3f843", "timestamp": "2026-10-26T13:59:07.501722+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 5.31, "faithfulness_score": 0.8088, "style_alignment_score": 0.9326}
+{"trace_id": "opik-trace-d16870181fdf", "timestamp": "2026-10-26T14:03:26.147008+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 7.05, "faithfulness_score": 0.8088, "style_alignment_score": 0.9326}
+{"trace_id": "opik-trace-eced4859a550", "timestamp": "2026-10-26T14:04:12.438999+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 3.47, "faithfulness_score": 0.8088, "style_alignment_score": 0.9326}
+{"trace_id": "opik-trace-d2e760a30c61", "timestamp": "2026-10-26T14:04:22.033817+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 2.93, "faithfulness_score": 0.8088, "style_alignment_score": 0.9326}
+{"trace_id": "opik-trace-8400d5a08c65", "timestamp": "2026-10-26T14:04:38.802597+00:00", "ab_variant": "Variant_B_LLMTwin_LoRA_AdvRAG", "latency_ms": 3.03, "faithfulness_score": 0.8333, "style_alignment_score": 0.9573}

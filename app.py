@@ -182,6 +182,7 @@ def _build_dashboard_context(active_page: str = "studio") -> Dict[str, Any]:
         "feedback_notice": None,
         "ingest_notice": None,
         "ops_diag": engine.get_pre2023_ops_diagnostics(),
+        "initial_step": 1,
     }
 
 
@@ -295,6 +296,7 @@ def studio_form_action(
             variant=mode_select,
             output_format=output_format,
         )
+    ctx["initial_step"] = 2
     return templates.TemplateResponse(request=request, name="index.html", context=ctx)
 
 
@@ -322,6 +324,7 @@ def feedback_form_action(
         f"(Total DPO Queue Size: {fb['dpo_queue_size']})."
     )
     ctx["chat_result"] = engine.generate_twin_response(query=query, top_k=3)
+    ctx["initial_step"] = 3
     return templates.TemplateResponse(request=request, name="index.html", context=ctx)
 
 
@@ -343,6 +346,7 @@ def warehouse_ingest_form(
         f"Successfully ingested '{title}' as {res['doc_id']} ({res['chunk_id']}) into MongoDB Warehouse "
         f"and Qdrant Vector DB! Total indexed chunks: {res['total_qdrant_chunks']}."
     )
+    ctx["initial_step"] = 2
     return templates.TemplateResponse(request=request, name="index.html", context=ctx)
 
 
@@ -365,6 +369,7 @@ def llama_lab_form(
     )
     ctx = _build_dashboard_context(active_page="llama_lab")
     ctx["llama_diag"] = diag
+    ctx["initial_step"] = 2
     return templates.TemplateResponse(request=request, name="index.html", context=ctx)
 
 
