@@ -106,5 +106,41 @@
         "chosen_response": "### Section: Mathematical Internals of LLaMA & Mistral: RMSNorm, RoPE, SwiGLU, and Grouped-Query Attention [TWIN-DOC-102]\n\npairs in the complex plane via e^(i * m * theta_j). Third, SwiGLU replaces ReLU feed-forward networks with a gated linear unit SwiGLU(x) = (SiLU(x W_gate) * x W_up) W_down. Fourth, Grouped-Query Attention (GQA) shares Key/Value heads across G = H_Q / H_KV query groups alongside Mistral's Sliding Window Attention (W=32/4096) to slash KV-cache memory. \n\n**Related Reference ([TWIN-DOC-102 / Mathematical Internals of LLaMA & Mistral: RMSNorm, RoPE, SwiGLU, and Grouped-Query Attention):** When building modern decoder-only LLMs from scratch in PyTorch, four mathematical upgrades replace the 2017 vanilla Transformer. First, RMSNorm eliminates mean-centering and normalizes activations strictly by RMS(x) = sqrt(mean(x^2) + eps), cutting normalization compute overhead by ~15%. Second, Rotary Positional Embeddings (RoPE) encode relative token distances by rotating query and key pairs in the complex plane via e^(i * m * theta_j). Third,",
         "rating": 5,
         "promoted_to_dpo_retraining_queue": true
+    },
+    {
+        "feedback_id": "fb-fa601592aa",
+        "trace_id": "opik-trace-c85b3a17fe1f",
+        "timestamp": "2026-10-26T13:44:09.070863+00:00",
+        "instruction": "Respond as Om Chavan's LLM Twin: Explain RMSNorm and RoPE in LLaMA.",
+        "chosen_response": "RMSNorm normalizes by root-mean-square and RoPE rotates query/key pairs.",
+        "rating": 5,
+        "promoted_to_dpo_retraining_queue": true
+    },
+    {
+        "feedback_id": "fb-215c06ce83",
+        "trace_id": "opik-trace-17f28905145f",
+        "timestamp": "2026-10-26T13:45:47.083283+00:00",
+        "instruction": "Respond as Om Chavan's LLM Twin: Explain RMSNorm and RoPE in LLaMA.",
+        "chosen_response": "RMSNorm normalizes by root-mean-square and RoPE rotates query/key pairs.",
+        "rating": 5,
+        "promoted_to_dpo_retraining_queue": true
+    },
+    {
+        "feedback_id": "fb-91bd63cc35",
+        "trace_id": "opik-trace-b5e5c3de741c",
+        "timestamp": "2026-10-26T13:46:38.749414+00:00",
+        "instruction": "Respond as Om Chavan's LLM Twin: Explain RMSNorm and RoPE in LLaMA.",
+        "chosen_response": "RMSNorm normalizes by root-mean-square and RoPE rotates query/key pairs.",
+        "rating": 5,
+        "promoted_to_dpo_retraining_queue": true
+    },
+    {
+        "feedback_id": "fb-a5e33b5729",
+        "trace_id": "opik-trace-e72ffd29fe4a",
+        "timestamp": "2026-10-26T13:46:39.028399+00:00",
+        "instruction": "Respond as Om Chavan's LLM Twin: Explain RMSNorm, RoPE, SwiGLU, and Grouped-Query Attention in LLaMA and Mistral.",
+        "chosen_response": "### Section: Mathematical Internals of LLaMA & Mistral: RMSNorm, RoPE, SwiGLU, and Grouped-Query Attention [TWIN-DOC-102]\n\npairs in the complex plane via e^(i * m * theta_j). Third, SwiGLU replaces ReLU feed-forward networks with a gated linear unit SwiGLU(x) = (SiLU(x W_gate) * x W_up) W_down. Fourth, Grouped-Query Attention (GQA) shares Key/Value heads across G = H_Q / H_KV query groups alongside Mistral's Sliding Window Attention (W=32/4096) to slash KV-cache memory. \n\n**Related Reference ([TWIN-DOC-102 / Mathematical Internals of LLaMA & Mistral: RMSNorm, RoPE, SwiGLU, and Grouped-Query Attention):** When building modern decoder-only LLMs from scratch in PyTorch, four mathematical upgrades replace the 2017 vanilla Transformer. First, RMSNorm eliminates mean-centering and normalizes activations strictly by RMS(x) = sqrt(mean(x^2) + eps), cutting normalization compute overhead by ~15%. Second, Rotary Positional Embeddings (RoPE) encode relative token distances by rotating query and key pairs in the complex plane via e^(i * m * theta_j). Third,",
+        "rating": 5,
+        "promoted_to_dpo_retraining_queue": true
     }
 ]

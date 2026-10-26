@@ -181,6 +181,7 @@ def _build_dashboard_context(active_page: str = "studio") -> Dict[str, Any]:
         "llama_diag": None,
         "feedback_notice": None,
         "ingest_notice": None,
+        "ops_diag": engine.get_pre2023_ops_diagnostics(),
     }
 
 
@@ -438,6 +439,13 @@ def submit_feedback(req: FeedbackRequest) -> Dict[str, Any]:
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.get("/ops-diagnostics", tags=["Bytewax, Feast, Qdrant & Evidently Ops"])
+def get_ops_diagnostics() -> Dict[str, Any]:
+    """Pre-2023 production systems diagnostics: Bytewax dedup, Qdrant INT8 quantization, Feast registry, Evidently drift."""
+    engine = get_inference_engine()
+    return engine.get_pre2023_ops_diagnostics()
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@
         "title": "Designing Production LLMs with the 3-Pipeline FTI (Feature, Training, Inference) Architecture",
         "content": "In my production engineering practice, monolithic LLM scripts fail the moment data velocity or model serving SLA requirements scale. Following the Feature-Training-Inference (FTI) architectural pattern, we decouple the LLM Twin into three autonomous pipelines communicating strictly through versioned stores. First, the Feature Pipeline crawls GitHub repositories, Medium articles, and LinkedIn posts into a MongoDB NoSQL warehouse, then cleans, chunks, and embeds records into a Qdrant Vector Database. Second, the Training Pipeline consumes Qdrant chunks to distill an instruction-tuning dataset versioned in CometML and DagsHub, fine-tuning a LoRA/QLoRA adapter pushed to Hugging Face Hub. Third, the Inference Pipeline pairs the fine-tuned LLM Twin adapter with Advanced Multi-Agent RAG and Comet Opik prompt telemetry.",
         "link": "https://medium.com/@29omchavan/3-pipeline-fti-architecture-llm-twin",
-        "created_at": "2026-10-26T13:15:55.221693+00:00",
+        "created_at": "2026-10-26T13:46:38.645240+00:00",
         "reading_time_minutes": 11,
         "tags": [
             "LLMOps",
@@ -27,7 +27,7 @@
         "title": "Mathematical Internals of LLaMA & Mistral: RMSNorm, RoPE, SwiGLU, and Grouped-Query Attention",
         "content": "When building modern decoder-only LLMs from scratch in PyTorch, four mathematical upgrades replace the 2017 vanilla Transformer. First, RMSNorm eliminates mean-centering and normalizes activations strictly by RMS(x) = sqrt(mean(x^2) + eps), cutting normalization compute overhead by ~15%. Second, Rotary Positional Embeddings (RoPE) encode relative token distances by rotating query and key pairs in the complex plane via e^(i * m * theta_j). Third, SwiGLU replaces ReLU feed-forward networks with a gated linear unit SwiGLU(x) = (SiLU(x W_gate) * x W_up) W_down. Fourth, Grouped-Query Attention (GQA) shares Key/Value heads across G = H_Q / H_KV query groups alongside Mistral's Sliding Window Attention (W=32/4096) to slash KV-cache memory.",
         "link": "https://medium.com/@29omchavan/llama-mistral-from-scratch-pytorch",
-        "created_at": "2026-10-26T13:15:55.221693+00:00",
+        "created_at": "2026-10-26T13:46:38.646396+00:00",
         "reading_time_minutes": 14,
         "tags": [
             "PyTorch",
@@ -46,7 +46,7 @@
         "title": "Hybrid Qdrant + BM25 Advanced RAG with Query Expansion, Self-Querying, and Cross-Reranking",
         "content": "Single-vector naive RAG suffers from vocabulary mismatch on exact error codes and loses multi-faceted context on complex architectural questions. Our Advanced RAG engine implements a four-stage retrieval funnel: (1) Query Expansion generates k=3 diverse technical sub-queries from the user prompt; (2) Self-Query Metadata Extraction parses explicit platform filters (github, medium, linkedin) and domain categories; (3) Hybrid Retrieval fuses Qdrant dense cosine search with BM25 lexical search via Reciprocal Rank Fusion RRF(d) = sum 1/(60 + rank(d)); and (4) Cross-Feature Reranking scores candidate passages on joint semantic + token-overlap fidelity before injecting cited [TWIN-DOC-XXX] evidence.",
         "link": "https://github.com/29OmChavan/mlops-project-4-llm-twin-system",
-        "created_at": "2026-10-26T13:15:55.221693+00:00",
+        "created_at": "2026-10-26T13:46:38.646396+00:00",
         "repo_name": "mlops-project-4-llm-twin-system",
         "primary_language": "Python",
         "stars": 185
@@ -60,7 +60,7 @@
         "title": "Instruction Dataset Distillation & LoRA Fine-Tuning for Personal AI Style Alignment",
         "content": "RAG injects factual knowledge at runtime, whereas Fine-Tuning bakes in stylistic voice, structural habits, and concise architectural reasoning. In our Training Pipeline, raw document chunks from Qdrant are transformed via Instruction Distillation into (instruction, input, output) triplets that reflect my engineering voice: first-principles mathematical clarity, trade-off tables, and production SLA rigor. We apply Low-Rank Adaptation ΔW = (alpha/r) B A with rank r=8 and alpha=16, training <1.5% of parameters while logging Twin Style Alignment Score and ROUGE-L to CometML and DagsHub MLflow.",
         "link": "https://github.com/29OmChavan/mlops-project-3-nlp-rag-summarizer",
-        "created_at": "2026-10-26T13:15:55.221693+00:00",
+        "created_at": "2026-10-26T13:46:38.646396+00:00",
         "repo_name": "mlops-project-3-nlp-rag-summarizer",
         "primary_language": "Python",
         "stars": 164
@@ -74,7 +74,7 @@
         "title": "Production LLMOps: Multi-Agent Guardrails, Comet Opik Telemetry, and DPO Feedback Loops",
         "content": "Shipping an LLM endpoint without observability is flying blind. In our Inference Pipeline, every user request flows through a Multi-Agent orchestrator: RouterAgent classifies the engineering intent, ResearcherAgent executes Advanced Hybrid RAG, TwinWriterAgent synthesizes the response in the author's voice, and SafetyCriticAgent audits prompt injection, PII exposure, and grounded faithfulness. Every span is logged to Comet Opik / CometML alongside an A/B testing router (Variant A Base+RAG vs. Variant B Fine-Tuned Twin+AdvRAG). High-rated user feedback (rating >= 4) is automatically exported into a DPO/SFT retraining dataset queue.",
         "link": "https://linkedin.com/in/om-chavan-mlops/posts/llmops-opik-dpo-feedback",
-        "created_at": "2026-10-26T13:15:55.221693+00:00",
+        "created_at": "2026-10-26T13:46:38.646396+00:00",
         "reactions_count": 312,
         "hashtags": [
             "#LLMOps",
@@ -93,7 +93,7 @@
         "title": "End-to-End CI/CD Evaluation Gates, Dynamic INT8 Quantization, and Containerized Serving",
         "content": "Across all four systems in our Production ML Engineer portfolio—from Insurance Risk Prediction and ResNet18 Disease Detection to Hybrid RAG Summarization and the LLM Twin—every deployment is governed by automated GitHub Actions CI/CD pipelines. Before any Docker image is pushed to Docker Hub, automated gates verify unit tests (pytest), PEP8 compliance (flake8), statistical drift status (KS-test), and model quality thresholds (ROUGE-L >= 0.30 and Twin Style Alignment >= 0.70).",
         "link": "https://linkedin.com/in/om-chavan-mlops/posts/cicd-quantization-docker",
-        "created_at": "2026-10-26T13:15:55.221693+00:00",
+        "created_at": "2026-10-26T13:46:38.646396+00:00",
         "reactions_count": 278,
         "hashtags": [
             "#MLOps",

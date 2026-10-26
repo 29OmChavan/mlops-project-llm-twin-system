@@ -482,7 +482,25 @@
                 </form>
             </div>
             <div class="wizard-pane" id="pane-2">
-                <p class="hint">Step 2: Documents currently stored in `artifacts/feature_store/mongodb_warehouse.json`.</p>
+                <p class="hint">Step 2: Bytewax stream deduplication, Qdrant INT8 quantization, Feast registry parity, and indexed corpus.</p>
+                {% if ops_diag is defined and ops_diag %}
+                <table style="margin-bottom:10px;">
+                    <tbody>
+                        <tr>
+                            <th>Bytewax Stream Window</th>
+                            <td><code>{{ ops_diag.bytewax_stream.engine }}</code> (W={{ ops_diag.bytewax_stream.window_size_seconds }}s, dropped={{ ops_diag.bytewax_stream.near_duplicates_dropped }}, unique={{ ops_diag.bytewax_stream.unique_upserted_chunks }})</td>
+                        </tr>
+                        <tr>
+                            <th>Qdrant INT8 Quantization</th>
+                            <td><code>{{ ops_diag.qdrant_quantization.index_type }}</code> ({{ ops_diag.qdrant_quantization.fp32_ram_bytes }}B -&gt; {{ ops_diag.qdrant_quantization.int8_ram_bytes }}B, <strong>-{{ ops_diag.qdrant_quantization.memory_reduction_pct }}% RAM</strong>, recall={{ ops_diag.qdrant_quantization.quantized_recall_retention }})</td>
+                        </tr>
+                        <tr>
+                            <th>Feast Feature Registry</th>
+                            <td><code>{{ ops_diag.feast_registry.registry_version }}</code> (Online/Offline Skew: <span class="label-pill pill-green">{{ ops_diag.feast_registry.training_serving_skew_detected }}</span>)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% endif %}
                 <table>
                     <thead>
                         <tr><th>Doc ID</th><th>Platform</th><th>Category</th><th>Title &amp; Excerpt</th></tr>
@@ -639,7 +657,21 @@
         </div>
         <div class="modal-body">
             <div class="wizard-pane active" id="pane-1">
-                <p class="hint">Step 1: Comet Opik JSONL trace log (`artifacts/inference/opik_telemetry_traces.jsonl`).</p>
+                <p class="hint">Step 1: Comet Opik JSONL trace log &amp; Evidently embedding/length drift monitor.</p>
+                {% if ops_diag is defined and ops_diag %}
+                <table style="margin-bottom:10px;">
+                    <tbody>
+                        <tr>
+                            <th>Evidently Drift Monitor</th>
+                            <td>PSI(query_len)=<code>{{ ops_diag.evidently_drift.psi_query_length }}</code> (thresh={{ ops_diag.evidently_drift.psi_threshold }}) | Wasserstein(emb)=<code>{{ ops_diag.evidently_drift.wasserstein_embedding_distance }}</code> | Drift: <span class="label-pill pill-green">{{ ops_diag.evidently_drift.drift_detected }}</span></td>
+                        </tr>
+                        <tr>
+                            <th>Shadow Challenger Routing</th>
+                            <td>Model: <code>{{ ops_diag.evidently_drift.shadow_challenger_model }}</code> ({{ ops_diag.evidently_drift.shadow_traffic_routed_pct }}% shadow traffic | {{ ops_diag.evidently_drift.shadow_primary_agreement_pct }}% agreement)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% endif %}
                 <table>
                     <thead>
                         <tr><th>Trace ID</th><th>Variant</th><th>Latency</th><th>Faithfulness</th><th>Citations</th></tr>
@@ -777,6 +809,7 @@
                         <option value="POST|/twin-chat">POST /twin-chat (RAG + LoRA Generation)</option>
                         <option value="POST|/ab-duel">POST /ab-duel (Variant A vs Variant B)</option>
                         <option value="POST|/llama-diagnostics">POST /llama-diagnostics (GQA &amp; RoPE Shapes)</option>
+                        <option value="GET|/ops-diagnostics">GET /ops-diagnostics (Bytewax, Qdrant INT8, Feast &amp; Evidently)</option>
                         <option value="GET|/health?format=json">GET /health?format=json</option>
                         <option value="GET|/telemetry?format=json">GET /telemetry?format=json</option>
                     </select>
